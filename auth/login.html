@@ -1,0 +1,68 @@
+<!-- ═══════════════════════════════════════════════════════════════
+     Ya Qalbi — Login Modal Fragment
+     Include this snippet inside index.html before </body>
+     and load auth/login.js after it.
+════════════════════════════════════════════════════════════════ -->
+<div id="login-modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
+  <div class="login-card">
+
+    <!-- Close (only shown when signed in) -->
+    <button id="btn-close-login" onclick="closeLogin()" aria-label="Close"
+      class="absolute top-5 right-5 text-on-surface-variant hover:text-primary transition-colors hidden">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <span class="material-symbols-outlined text-primary text-4xl mb-3 block"
+        style="font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">favorite</span>
+      <h2 id="login-title" class="font-headline-md text-headline-md text-primary italic">
+        Welcome back
+      </h2>
+    </div>
+
+    <!-- Step 1: Goodnight question -->
+    <div id="login-step-1" class="login-step">
+      <label class="font-label-md text-on-surface block mb-3">
+        What is the last word we always say after "Goodnight"?
+      </label>
+      <input id="input-callsign" type="text" class="login-input"
+        placeholder="Type your answer…" autocomplete="off"
+        onkeydown="if(event.key==='Enter') checkCallsign()"/>
+      <p id="error-callsign" class="hidden mt-2 font-label-sm" style="color:#ba1a1a;">
+        Hmm, that doesn't sound right. Try again.
+      </p>
+      <button onclick="checkCallsign()"
+        class="mt-6 w-full px-6 py-3 rounded-full bg-primary text-on-primary font-label-md hover:scale-95 transition-transform">
+        Continue
+      </button>
+    </div>
+
+    <!-- Step 2: Monthsary -->
+    <div id="login-step-2" class="login-step hidden-step">
+      <label class="font-label-md text-on-surface block mb-3">
+        When was our monthsary?
+      </label>
+      <input id="input-monthsary" type="text" class="login-input"
+        placeholder="e.g. June 26, 06/26, Jun 26…" autocomplete="off"
+        onkeydown="if(event.key==='Enter') checkMonthsary()"/>
+      <p id="error-monthsary" class="hidden mt-2 font-label-sm" style="color:#ba1a1a;">
+        That date doesn't match. Give it another try.
+      </p>
+      <button onclick="checkMonthsary()"
+        class="mt-6 w-full px-6 py-3 rounded-full bg-primary text-on-primary font-label-md hover:scale-95 transition-transform">
+        Sign In
+      </button>
+    </div>
+
+    <!-- Step 3: Success -->
+    <div id="login-step-3" class="login-step hidden-step text-center">
+      <p class="text-4xl mb-4">💕</p>
+      <h3 class="font-headline-md text-headline-md text-primary italic mb-2">
+        Welcome home, my love.
+      </h3>
+      <p class="font-body-md text-secondary">You now have full access.</p>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,17 @@
+# ── Secrets & credentials ─────────────────────────────────────
+database/supdabase password.txt
+*.env
+.env
+.env.local
+.env.*
+*password*
+*secret*
+*credentials*
+
+# ── OS files ──────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Editor ────────────────────────────────────────────────────
+.vscode/settings.json

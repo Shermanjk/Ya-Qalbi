@@ -1,0 +1,44 @@
+/* ═══════════════════════════════════════════════════════════════
+   Ya Qalbi — Butterfly Animations CSS
+   Loaded via <link> in index.html
+═══════════════════════════════════════════════════════════════ */
+
+/* ── Floating butterflies (heart-click, viewer mode) ────────── */
+/* Animation is JS-driven via rAF for smooth realistic flight.
+   CSS only provides the base stacking context. */
+.float-butterfly {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+}
+
+/* ── Landing butterflies (tagline, hero) ─────────────────────── */
+.landing-butterfly {
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.landing-butterfly svg {
+  display: block;
+  /* Gentle slow wing-breathe — open slightly then close again, like resting */
+  animation: landedWingRest var(--lflap, 2.4s) ease-in-out infinite alternate;
+  transform-origin: 51% 58%;   /* pivot from body centre */
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.45))
+          drop-shadow(0 0 18px rgba(30,144,255,0.45))
+          drop-shadow(0 0 40px rgba(0,100,220,0.20));
+}
+
+@keyframes landedWingRest {
+  /* Side-profile: wing tips rise (scaleY toward 1) and lower slightly */
+  from { transform: scaleY(0.90) scaleX(1.02); }
+  to   { transform: scaleY(1.00) scaleX(0.98); }
+}
+
+@keyframes butterflyApproach {
+  0%   { transform: translate(var(--ax, 120px), var(--ay, 80px)) rotate(var(--ar, -20deg)) scale(0.25); opacity: 0; }
+  12%  { opacity: 1; }
+  65%  { transform: translate(calc(var(--ax) * 0.12), calc(var(--ay) * 0.12)) rotate(calc(var(--ar) * 0.15)) scale(1.08); opacity: 1; }
+  80%  { transform: translate(0, -5px) rotate(3deg) scale(1.04); }
+  92%  { transform: translate(0, 1px)  rotate(-1deg) scale(1.01); }
+  100% { transform: translate(0, 0)    rotate(0deg)  scale(1);    opacity: 1; }
+}

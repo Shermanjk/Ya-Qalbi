@@ -1,0 +1,2206 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Together | A Private Sanctuary</title>
+<link rel="icon" type="image/png" href="assets/Logo.png"/>
+<link rel="apple-touch-icon" href="assets/Logo.png"/>
+<script>
+// Convert the square logo into a circular favicon at runtime
+(function() {
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = function() {
+    const size = 192;
+    const c = document.createElement('canvas');
+    c.width = c.height = size;
+    const ctx = c.getContext('2d');
+    // Clip to circle
+    ctx.beginPath();
+    ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+    ctx.closePath();
+    ctx.clip();
+    // Draw the logo centred and cropped square
+    const s = Math.min(img.width, img.height);
+    const ox = (img.width  - s) / 2;
+    const oy = (img.height - s) / 2;
+    ctx.drawImage(img, ox, oy, s, s, 0, 0, size, size);
+    // Replace favicon with circular version
+    let link = document.querySelector("link[rel='icon']");
+    if (!link) { link = document.createElement('link'); link.rel = 'icon'; document.head.appendChild(link); }
+    link.type = 'image/png';
+    link.href = c.toDataURL('image/png');
+  };
+  img.src = 'assets/Logo.png';
+})();
+</script>
+<!-- Apply saved theme before paint to prevent flash -->
+<script>if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark');</script>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Be+Vietnam+Pro:wght@100;300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="butterflies.css" rel="stylesheet"/>
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "tertiary-container":"#daaba2","secondary-fixed-dim":"#c9c6c1","tertiary-fixed":"#ffdad3",
+        "secondary-fixed":"#e6e2dc","outline":"#847370","inverse-on-surface":"#f8efea",
+        "secondary-container":"#e6e2dc","on-primary-fixed-variant":"#6a3930","error-container":"#ffdad6",
+        "surface-variant":"#e9e1dc","on-error-container":"#93000a","primary-fixed":"#ffdad3",
+        "on-primary":"#ffffff","inverse-surface":"#34302c","primary-fixed-dim":"#fbb6a8",
+        "background":"#fff8f5","surface-container-highest":"#e9e1dc","surface-tint":"#865046",
+        "surface-container-low":"#fbf2ed","surface-dim":"#e1d8d4","secondary":"#605e5a",
+        "on-tertiary-fixed-variant":"#603e38","tertiary-fixed-dim":"#ecbbb2",
+        "on-primary-container":"#6a3930","surface-bright":"#fff8f5","primary-container":"#e8a598",
+        "error":"#ba1a1a","outline-variant":"#d7c2be","surface":"#fff8f5",
+        "on-surface-variant":"#524341","on-surface":"#1e1b18","surface-container-high":"#efe6e2",
+        "surface-container-lowest":"#ffffff","on-tertiary":"#ffffff","inverse-primary":"#fbb6a8",
+        "primary":"#865046","tertiary":"#7b554e","on-background":"#1e1b18",
+        "surface-container":"#f5ece7","on-secondary-container":"#666460","on-primary-fixed":"#351009",
+        "on-error":"#ffffff","on-secondary-fixed-variant":"#484743","on-tertiary-fixed":"#2e140f",
+        "on-secondary":"#ffffff","on-tertiary-container":"#603e38","on-secondary-fixed":"#1c1c18"
+      },
+      borderRadius: {
+        "DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"
+      },
+      spacing: {
+        "stack-sm":"12px","stack-md":"24px","stack-lg":"48px","gutter":"24px",
+        "container-padding-desktop":"40px","unit":"8px","container-padding-mobile":"20px"
+      },
+      fontFamily: {
+        "headline-lg-mobile":["EB Garamond"],"headline-lg":["EB Garamond"],
+        "headline-md":["EB Garamond"],"body-lg":["Be Vietnam Pro"],
+        "label-md":["Be Vietnam Pro"],"display-lg":["EB Garamond"],
+        "body-md":["Be Vietnam Pro"],"label-sm":["Be Vietnam Pro"]
+      },
+      fontSize: {
+        "headline-lg-mobile":["28px",{"lineHeight":"36px","fontWeight":"500"}],
+        "headline-lg":["32px",{"lineHeight":"40px","fontWeight":"500"}],
+        "headline-md":["24px",{"lineHeight":"32px","fontWeight":"500"}],
+        "body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}],
+        "label-md":["14px",{"lineHeight":"20px","letterSpacing":"0.05em","fontWeight":"600"}],
+        "display-lg":["48px",{"lineHeight":"56px","letterSpacing":"-0.02em","fontWeight":"500"}],
+        "body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],
+        "label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.03em","fontWeight":"500"}]
+      }
+    }
+  }
+}
+</script>
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    display: inline-block; line-height: 1;
+  }
+  .glass-effect { backdrop-filter: blur(20px); background-color: rgba(255,255,255,0.8); }
+  .text-glow { text-shadow: 0 0 20px rgba(134,80,70,0.2); }
+  /* Masonry */
+  .masonry { column-count:1; column-gap:1.5rem; }
+  @media(min-width:768px){.masonry{column-count:2;}}
+  @media(min-width:1024px){.masonry{column-count:3;}}
+  .masonry-item { break-inside:avoid; margin-bottom:1.5rem; }
+  .reveal-on-hover { opacity:0; transition:opacity 0.3s ease; }
+  .masonry-item:hover .reveal-on-hover { opacity:1; }
+  /* Timeline */
+  .timeline-line {
+    background: linear-gradient(to bottom, transparent, #7b554e 10%, #7b554e 90%, transparent);
+    width:1px;
+  }
+  .glass-card {
+    background:rgba(255,255,255,0.8);
+    backdrop-filter:blur(20px);
+    box-shadow:0 30px 60px -12px rgba(60,48,44,0.04);
+  }
+  .reveal-on-scroll { opacity:0; transform:translateY(20px); transition:all 0.8s cubic-bezier(0.22,1,0.36,1); }
+  .reveal-on-scroll.visible { opacity:1; transform:translateY(0); }
+  /* Page visibility */
+  .page { display:none; }
+  .page.active { display:block; }
+  /* Nav active state */
+  .nav-link { color: #605e5a; transition: color 0.3s; }
+  .nav-link:hover { color: #865046; }
+  .nav-link.active { color: #865046; font-weight:700; border-bottom:2px solid #865046; padding-bottom:4px; }
+
+  /* Partner-only elements — hidden for ALL visitors by default.
+     Only revealed when body.is-partner is set by auth/login.js */
+  [data-partner-only] { display: none !important; }
+
+  /* Restore correct display per element type on partner sign-in */
+  body.is-partner label[data-partner-only]   { display: flex !important; }
+  body.is-partner button[data-partner-only]  { display: inline-flex !important; }
+  body.is-partner section[data-partner-only] { display: block !important; }
+  /* divs with flex layout classes stay flex; others become block */
+  body.is-partner div[data-partner-only]                          { display: block !important; }
+  body.is-partner div[data-partner-only].flex                     { display: flex !important; }
+  body.is-partner div[data-partner-only].flex-col                 { display: flex !important; flex-direction: column; }
+  body.is-partner div[data-partner-only].flex-shrink-0.flex       { display: flex !important; }
+  body.is-partner div[data-partner-only].flex-shrink-0.flex-col   { display: flex !important; flex-direction: column; }
+
+  /* Partner editable fields */
+  .partner-editable {
+    outline: none;
+    border-bottom: 2px dashed #e8a598;
+    cursor: text;
+    transition: border-color 0.2s;
+    min-width: 20px;
+    display: inline-block;
+  }
+  .partner-editable:focus { border-bottom-color: #865046; }
+  /* Image loading skeleton */
+  .img-loading {
+    position: relative;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    min-height: 200px;
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+  .img-loading::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(134,80,70,0.05) 0%, transparent 100%);
+  }
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  .img-loaded {
+    animation: fadeIn 0.5s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  /* Apply loading state to images with loading class */
+  img.loading {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  img.loaded {
+    opacity: 1;
+  }
+
+  /* Shared modal base */
+  .app-modal {
+    display: none;
+    position: fixed; inset: 0; z-index: 90;
+    background: rgba(30,27,24,0.5);
+    backdrop-filter: blur(8px);
+    align-items: center; justify-content: center;
+    padding: 1rem;
+  }
+  .app-modal.open { display: flex; }
+  .app-modal-card {
+    background: #fff8f5;
+    border-radius: 2rem;
+    padding: 2.5rem;
+    width: 100%; max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 40px 80px -12px rgba(60,48,44,0.18);
+    position: relative;
+  }
+  .app-input {
+    width: 100%;
+    background: #f5ece7;
+    border: 1.5px solid #d7c2be;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 15px;
+    color: #1e1b18;
+    outline: none;
+    transition: border-color 0.2s;
+    margin-bottom: 1rem;
+  }
+  .app-input:focus { border-color: #865046; }
+  .app-label { font-family: 'Be Vietnam Pro', sans-serif; font-size: 13px; font-weight: 600; color: #524341; display: block; margin-bottom: 4px; letter-spacing: 0.04em; }
+
+  /* Hero background — gentle Ken Burns drift */
+  @keyframes kenburns {
+    0%   { transform: scale(1.08) translate(0px, 0px); }
+    25%  { transform: scale(1.06) translate(-6px, -4px); }
+    50%  { transform: scale(1.10) translate(-10px, 4px); }
+    75%  { transform: scale(1.06) translate(-4px, -2px); }
+    100% { transform: scale(1.08) translate(0px, 0px); }
+  }
+  #hero-bg {
+    animation: kenburns 28s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  /* ── Hero aurora overlay — slow-drifting color wash ─────────── */
+  @keyframes auroraDrift {
+    0%   { transform: translate(0%,   0%)   scale(1);    opacity: 0.55; }
+    25%  { transform: translate(8%,  -6%)   scale(1.08); opacity: 0.65; }
+    50%  { transform: translate(-4%,  10%)  scale(1.04); opacity: 0.50; }
+    75%  { transform: translate(-10%, -4%)  scale(1.10); opacity: 0.60; }
+    100% { transform: translate(0%,   0%)   scale(1);    opacity: 0.55; }
+  }
+  #hero-aurora {
+    position: absolute;
+    inset: -30%;
+    width: 160%; height: 160%;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    animation: auroraDrift 22s ease-in-out infinite;
+    will-change: transform, opacity;
+    /* Light mode: warm rose-peach wash */
+    background: radial-gradient(
+      ellipse 70% 60% at 50% 50%,
+      rgba(232,165,152,0.35) 0%,
+      rgba(251,182,168,0.18) 35%,
+      rgba(255,218,211,0.08) 60%,
+      transparent 80%
+    );
+  }
+  html.dark #hero-aurora {
+    /* Dark mode: golden-amber glow */
+    background: radial-gradient(
+      ellipse 70% 60% at 50% 50%,
+      rgba(212,175,55,0.28) 0%,
+      rgba(190,140,40,0.14) 35%,
+      rgba(212,175,55,0.05) 60%,
+      transparent 80%
+    ) !important;
+  }
+
+  /* ── Hero badge ── */
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px 6px 12px;
+    border-radius: 9999px;
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.30);
+    color: #ffffff;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(-8px);
+    animation: heroFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.2s forwards;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+  }
+  html.dark .hero-badge {
+    background: rgba(212,175,55,0.15);
+    border-color: rgba(212,175,55,0.35);
+    box-shadow: 0 4px 24px rgba(212,175,55,0.20);
+  }
+
+  /* ── Hero text staggered entrance ── */
+  @keyframes heroFadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-badge    { animation: heroFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.15s forwards; }
+  .hero-tagline  { opacity: 0; animation: heroFadeUp 0.9s cubic-bezier(0.22,1,0.36,1) 0.40s forwards; }
+  .hero-sub      { opacity: 0; animation: heroFadeUp 0.9s cubic-bezier(0.22,1,0.36,1) 0.70s forwards; }
+  .hero-cta-row  { opacity: 0; animation: heroFadeUp 0.9s cubic-bezier(0.22,1,0.36,1) 0.95s forwards; }
+
+  /* ── Scroll indicator ── */
+  @keyframes scrollBounce {
+    0%, 100% { transform: translateY(0); opacity: 0.7; }
+    50%       { transform: translateY(8px); opacity: 1; }
+  }
+  #hero-scroll-hint {
+    opacity: 0;
+    animation: heroFadeUp 0.8s ease 1.4s forwards;
+    transition: opacity 0.6s ease;
+  }
+  #hero-scroll-hint.hide { opacity: 0 !important; pointer-events: none; }
+  #hero-scroll-hint span {
+    display: block;
+    animation: scrollBounce 1.8s ease-in-out infinite;
+  }
+
+  /* ── Floating particles animation for hero section ──────────────────────────── */
+  .hero-particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 70%);
+    animation: floatParticle linear infinite;
+  }
+
+  @keyframes floatParticle {
+    0% {
+      transform: translateY(100vh) scale(0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.8;
+    }
+    90% {
+      opacity: 0.6;
+    }
+    100% {
+      transform: translateY(-20vh) scale(1);
+      opacity: 0;
+    }
+  }
+
+  /* Dark mode particles - golden glow */
+  html.dark .particle {
+    background: radial-gradient(circle, rgba(212,175,55,0.5) 0%, rgba(212,175,55,0) 70%);
+  }
+
+  /* Login modal */
+  #login-modal {
+    display: none;
+    position: fixed; inset: 0; z-index: 100;
+    background: rgba(30,27,24,0.5);
+    backdrop-filter: blur(8px);
+    align-items: center; justify-content: center;
+  }
+  #login-modal.open { display: flex; }
+  .login-card {
+    background: #fff8f5;
+    border-radius: 2rem;
+    padding: 3rem 2.5rem;
+    width: 100%; max-width: 420px;
+    box-shadow: 0 40px 80px -12px rgba(60,48,44,0.18);
+    position: relative;
+  }
+  .login-input {
+    width: 100%;
+    background: #f5ece7;
+    border: 1.5px solid #d7c2be;
+    border-radius: 0.75rem;
+    padding: 0.875rem 1.25rem;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 16px;
+    color: #1e1b18;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .login-input:focus { border-color: #865046; }
+  .login-input.error { border-color: #ba1a1a; animation: shake 0.3s ease; }
+  @keyframes shake {
+    0%,100%{transform:translateX(0)}
+    25%{transform:translateX(-6px)}
+    75%{transform:translateX(6px)}
+  }
+  .login-step { transition: opacity 0.3s, transform 0.3s; }
+  .login-step.hidden-step { opacity:0; pointer-events:none; position:absolute; transform:translateX(20px); }
+  
+  /* Welcome animation */
+  #login-step-3.animate p.text-4xl {
+    animation: heartPop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+  }
+  #login-step-3.animate h3 {
+    animation: fadeSlideUp 0.5s ease-out 0.2s forwards;
+  }
+  #login-step-3.animate p.font-body-md {
+    animation: fadeSlideUp 0.5s ease-out 0.4s forwards;
+  }
+  #login-step-3 p.text-4xl,
+  #login-step-3 h3,
+  #login-step-3 p.font-body-md {
+    opacity: 0;
+  }
+  #login-step-3 h3,
+  #login-step-3 p.font-body-md {
+    transform: translateY(20px);
+  }
+  @keyframes heartPop {
+    0% { opacity: 0; transform: scale(0) rotate(-180deg); }
+    100% { opacity: 1; transform: scale(1) rotate(0deg); }
+  }
+  @keyframes fadeSlideUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Dark Mode ──────────────────────────────────────────────────── */
+
+  /* Base */
+  html.dark body {
+    background-color: #1a1210 !important;
+    color: #ffffff !important;
+  }
+
+  /* ── Backgrounds ── */
+  html.dark .bg-background,
+  html.dark .bg-surface             { background-color: #1a1210 !important; }
+  html.dark .bg-surface-container-lowest { background-color: #140e0d !important; }
+  html.dark .bg-surface-container-low    { background-color: #221f1c !important; }
+  html.dark .bg-surface-container        { background-color: #2e2522 !important; }
+  html.dark .bg-surface-container-high   { background-color: #3a3330 !important; }
+  html.dark .bg-surface-container-highest{ background-color: #46403c !important; }
+  html.dark .bg-surface-bright,
+  html.dark .bg-surface-dim          { background-color: #2e2522 !important; }
+
+  /* Header & mobile menu */
+  html.dark #site-header             { background-color: rgba(26,18,16,0.90) !important; }
+  html.dark #mobile-menu             { background-color: rgba(26,18,16,0.97) !important; }
+
+  /* Glass / blur cards */
+  html.dark .glass-card              { background: rgba(46,37,34,0.88) !important; }
+  html.dark .glass-effect            { background-color: rgba(46,37,34,0.88) !important; }
+
+  /* Modals */
+  html.dark .app-modal-card,
+  html.dark .login-card              { background: #2e2522 !important; }
+
+  /* Partner "Change Photo" labels */
+  html.dark label[data-partner-only] { background-color: rgba(46,37,34,0.80) !important; color: #ffd97a !important; }
+
+  /* Tertiary tint card */
+  html.dark .bg-tertiary-container\/20 { background-color: rgba(123,85,78,0.25) !important; }
+
+  /* Primary-container tint */
+  html.dark .bg-primary-container\/10  { background-color: rgba(134,80,70,0.15) !important; }
+
+  /* Inputs & selects */
+  html.dark .app-input,
+  html.dark .login-input {
+    background: #3a3330 !important;
+    border-color: #6b4c48 !important;
+    color: #ffffff !important;
+  }
+  html.dark .app-input::placeholder,
+  html.dark .login-input::placeholder { color: #b09898 !important; }
+  html.dark .app-input option         { background: #2e2522; color: #ffffff; }
+
+  /* ── Text — everything white or near-white ── */
+
+  /* Catch-all: every element inside dark body gets white text unless overridden below */
+  html.dark body *                         { color: #ffffff; }
+
+  /* Headings & display — pure white with a faint gold glow */
+  html.dark h1, html.dark h2, html.dark h3,
+  html.dark h4, html.dark h5, html.dark h6 {
+    color: #ffffff !important;
+    text-shadow: 0 0 18px rgba(212,175,55,0.22);
+  }
+
+  /* Paragraphs / body copy — soft white so it doesn't overpower headings */
+  html.dark p                              { color: #f0e8e4 !important; }
+
+  /* Tailwind text utility overrides */
+  html.dark .text-on-surface               { color: #ffffff !important; }
+  html.dark .text-on-surface-variant       { color: #f0e8e4 !important; }
+  html.dark .text-secondary                { color: #e8ddd8 !important; }
+  html.dark .text-on-secondary-container   { color: #f0e8e4 !important; }
+  html.dark .text-on-tertiary-container    { color: #ffdad3 !important; }
+  html.dark .text-on-tertiary              { color: #ffffff !important; }
+  html.dark .text-on-background            { color: #ffffff !important; }
+  html.dark .text-outline-variant          { color: #c4a8a3 !important; }
+  html.dark .text-on-primary-container     { color: #ffffff !important; }
+  html.dark .text-on-primary               { color: #ffffff !important; }
+  html.dark .text-surface-container        { color: #f0e8e4 !important; }
+
+  /* Primary accent — keep the warm salmon but brighter */
+  html.dark .text-primary                  { color: #fbb6a8 !important; }
+
+  /* Tertiary accent */
+  html.dark .text-tertiary                 { color: #ecbbb2 !important; }
+
+  /* Nav links */
+  html.dark .nav-link                { color: #f0e8e4 !important; }
+  html.dark .nav-link:hover          { color: #ffd97a !important; }
+  html.dark .nav-link.active         {
+    color: #ffd97a !important;
+    border-bottom-color: #ffd97a !important;
+    text-shadow: 0 0 10px rgba(255,217,122,0.5);
+  }
+
+  /* App / form labels */
+  html.dark .app-label               { color: #f0e8e4 !important; }
+
+  /* Login modal */
+  html.dark #login-step-1 label,
+  html.dark #login-step-2 label,
+  html.dark .font-label-md           { color: #f0e8e4 !important; }
+  html.dark #login-title             { color: #ffd97a !important; text-shadow: 0 0 14px rgba(255,217,122,0.45); }
+
+  /* Countdown labels */
+  html.dark #countdown-label,
+  html.dark .uppercase.tracking-widest { color: #e8ddd8 !important; }
+
+  /* ── Borders ── */
+  html.dark .border-outline-variant\/10,
+  html.dark .border-outline-variant\/20,
+  html.dark .border-outline-variant\/30,
+  html.dark .border-outline-variant\/40 { border-color: rgba(107,76,72,0.50) !important; }
+  html.dark .border-tertiary\/10        { border-color: rgba(123,85,78,0.35) !important; }
+
+  /* ── Footer ── */
+  html.dark footer                   { background-color: #1a1210 !important; }
+  html.dark footer p                 { color: #b09898 !important; }
+
+  /* ── Empty state icons & text ── */
+  html.dark #gallery-empty p,
+  html.dark #timeline-empty p        { color: #b09898 !important; }
+  html.dark #gallery-empty span,
+  html.dark #timeline-empty span     { color: #6b4c48 !important; }
+
+  /* ── Milestone timeline line ── */
+  html.dark .timeline-line {
+    background: linear-gradient(to bottom, transparent, #c09070 10%, #c09070 90%, transparent) !important;
+  }
+
+  /* ── Selection highlight ── */
+  html.dark ::selection {
+    background-color: rgba(212,175,55,0.35);
+    color: #ffffff;
+  }
+
+  /* ── Background Photo Toning — lighter touch ── */
+
+  /* Hero photo — subtle dim, keep the colours alive */
+  html.dark #hero-bg {
+    filter: brightness(0.85) saturate(0.88) sepia(0.10);
+  }
+
+  /* Hero gradient — blend into dark bg without killing the photo */
+  html.dark .absolute.inset-0.bg-gradient-to-b {
+    background: linear-gradient(
+      to bottom,
+      rgba(26,18,16,0.15) 0%,
+      rgba(26,18,16,0.35) 40%,
+      rgba(26,18,16,0.75) 85%,
+      #1a1210 100%
+    ) !important;
+  }
+
+  /* Bento featured card photo — keep it vivid */
+  html.dark #bento-featured-bg {
+    filter: brightness(0.82) saturate(0.85) sepia(0.10);
+  }
+
+  /* Bento adventure card photo */
+  html.dark #bento-adventure-bg {
+    filter: brightness(0.84) saturate(0.88) sepia(0.10);
+  }
+
+  /* Bento featured overlay scrim */
+  html.dark .absolute.inset-0.bg-gradient-to-t {
+    background: linear-gradient(
+      to top,
+      rgba(14,9,8,0.72) 0%,
+      rgba(14,9,8,0.20) 55%,
+      transparent 100%
+    ) !important;
+  }
+
+  /* ── Button Glow ── */
+  html.dark .bg-primary {
+    box-shadow: 0 0 12px 3px rgba(212,175,55,0.35), 0 0 28px 6px rgba(212,175,55,0.15) !important;
+    transition: box-shadow 0.4s ease, transform 0.2s ease !important;
+  }
+  html.dark .bg-primary:hover {
+    box-shadow: 0 0 18px 5px rgba(212,175,55,0.55), 0 0 40px 10px rgba(212,175,55,0.2) !important;
+  }
+  html.dark .border-primary,
+  html.dark #theme-toggle {
+    border-color: rgba(107,76,72,0.6) !important;
+    box-shadow: 0 0 8px 2px rgba(212,175,55,0.25), 0 0 20px 4px rgba(212,175,55,0.10) !important;
+    transition: box-shadow 0.4s ease !important;
+  }
+  html.dark .border-primary:hover,
+  html.dark #theme-toggle:hover {
+    box-shadow: 0 0 14px 4px rgba(212,175,55,0.45), 0 0 32px 8px rgba(212,175,55,0.18) !important;
+  }
+  html.dark .bg-tertiary {
+    box-shadow: 0 0 10px 2px rgba(212,175,55,0.28), 0 0 24px 5px rgba(212,175,55,0.12) !important;
+    transition: box-shadow 0.4s ease !important;
+  }
+  html.dark .bg-tertiary:hover {
+    box-shadow: 0 0 16px 4px rgba(212,175,55,0.48), 0 0 36px 8px rgba(212,175,55,0.18) !important;
+  }
+  html.dark .filter-btn {
+    transition: box-shadow 0.3s ease, background-color 0.3s !important;
+  }
+  html.dark .filter-btn:hover,
+  html.dark .filter-btn.bg-primary-container {
+    box-shadow: 0 0 10px 2px rgba(212,175,55,0.30) !important;
+  }
+
+  /* ── Tagline phrase — elegant typography ──────────────────────────── */
+  .tagline-phrase {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: clamp(28px, 5vw, 56px);
+    line-height: 1.3;
+    letter-spacing: -0.005em;
+    text-align: center;
+    color: #ffffff;
+    -webkit-text-fill-color: #ffffff;
+    background: none;
+    text-shadow:
+      0 2px 8px rgba(0,0,0,0.4),
+      0 4px 16px rgba(0,0,0,0.3);
+    transform: perspective(800px) rotateX(0deg) rotateY(0deg);
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: transform 0.15s ease-out;
+    display: block;
+    cursor: default;
+  }
+
+  html.dark .tagline-phrase {
+    background: none !important;
+    -webkit-background-clip: unset !important;
+    -webkit-text-fill-color: #ffffff !important;
+    background-clip: unset !important;
+    color: #ffffff !important;
+    filter: none;
+    text-shadow:
+      0 2px 10px rgba(0,0,0,0.7),
+      0 4px 24px rgba(0,0,0,0.55),
+      0 0 40px rgba(0,0,0,0.35);
+  }
+
+  /* ── Hero subtitle — visible on photo in both modes ── */
+  .hero-subtitle {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    text-shadow:
+      0 1px 4px rgba(0,0,0,0.65),
+      0 2px 12px rgba(0,0,0,0.45),
+      0 0 20px rgba(0,0,0,0.25);
+  }
+  html.dark .hero-subtitle {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    text-shadow:
+      0 1px 8px rgba(0,0,0,0.75),
+      0 2px 20px rgba(0,0,0,0.55),
+      0 0 30px rgba(0,0,0,0.35);
+  }
+
+  /* ── Hero badge & CTA — force white text on photo in both modes ── */
+  .hero-badge,
+  .hero-badge * {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+
+  /* Hero CTA buttons — both modes stay white since they sit on the photo */
+  #page-home .hero-cta-row button {
+    -webkit-text-fill-color: currentColor;
+  }
+  #page-home .hero-cta-row .bg-primary {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+  #page-home .hero-cta-row .border-white\/50 {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+
+  /* ── Hero CTA hover highlights ── */
+  .hero-cta-btn {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* Filled "Our Gallery" button */
+  .hero-cta-primary {
+    box-shadow: 0 4px 20px rgba(134,80,70,0.35);
+  }
+  .hero-cta-primary:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow:
+      0 0 0 3px rgba(255,255,255,0.25),
+      0 8px 30px rgba(134,80,70,0.55),
+      0 0 40px rgba(232,165,152,0.35);
+    background-color: #9c6258 !important;
+  }
+
+  /* Ghost "Our Story" button */
+  .hero-cta-ghost {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  }
+  .hero-cta-ghost:hover {
+    transform: translateY(-2px) scale(1.03);
+    background: rgba(255,255,255,0.20);
+    border-color: rgba(255,255,255,0.85) !important;
+    box-shadow:
+      0 0 0 3px rgba(255,255,255,0.20),
+      0 8px 30px rgba(255,255,255,0.15),
+      inset 0 0 20px rgba(255,255,255,0.08);
+  }
+
+  /* Dark mode — golden glow on hover */
+  html.dark .hero-cta-primary:hover {
+    box-shadow:
+      0 0 0 3px rgba(212,175,55,0.40),
+      0 8px 30px rgba(212,175,55,0.45),
+      0 0 50px rgba(212,175,55,0.20);
+    background-color: #9c6258 !important;
+  }
+  html.dark .hero-cta-ghost:hover {
+    background: rgba(212,175,55,0.12);
+    border-color: rgba(212,175,55,0.70) !important;
+    box-shadow:
+      0 0 0 3px rgba(212,175,55,0.25),
+      0 8px 30px rgba(212,175,55,0.20),
+      inset 0 0 20px rgba(212,175,55,0.08);
+  }
+
+  /* Scroll hint — always white on the photo */
+  #hero-scroll-hint,
+  #hero-scroll-hint * {
+    color: rgba(255,255,255,0.65) !important;
+    -webkit-text-fill-color: rgba(255,255,255,0.65) !important;
+  }
+
+  /* Theme toggle icon */
+  #theme-icon { transition: transform 0.3s ease, opacity 0.2s; }
+  #theme-toggle:hover #theme-icon { transform: rotate(20deg); }
+
+  /* ── Song player heart loader ──────────────────────────────── */
+  .song-heart-loader {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+  }
+  .song-heart-loader span {
+    font-size: 28px;
+    line-height: 1;
+    display: inline-block;
+    animation: heartBeat 1.1s ease-in-out infinite;
+    filter: drop-shadow(0 0 8px rgba(212,60,80,0.7));
+  }
+  .song-heart-loader span:nth-child(1) { animation-delay: 0s;    font-size: 22px; }
+  .song-heart-loader span:nth-child(2) { animation-delay: 0.18s; font-size: 32px; }
+  .song-heart-loader span:nth-child(3) { animation-delay: 0.36s; font-size: 22px; }
+
+  @keyframes heartBeat {
+    0%   { transform: scale(1);    filter: drop-shadow(0 0 6px  rgba(212,60,80,0.6)); }
+    14%  { transform: scale(1.25); filter: drop-shadow(0 0 16px rgba(212,60,80,0.9)); }
+    28%  { transform: scale(1);    filter: drop-shadow(0 0 6px  rgba(212,60,80,0.6)); }
+    42%  { transform: scale(1.15); filter: drop-shadow(0 0 12px rgba(212,60,80,0.8)); }
+    70%  { transform: scale(1);    filter: drop-shadow(0 0 6px  rgba(212,60,80,0.6)); }
+    100% { transform: scale(1);    filter: drop-shadow(0 0 6px  rgba(212,60,80,0.6)); }
+  }
+
+  /* ── Heart animations ──────────────────────────────────────── */
+
+  /* ── Viewer: floating glow hearts ──────────────────────────── */
+  .float-heart {
+    position: fixed;
+    bottom: -80px;
+    pointer-events: none;
+    z-index: 9999;
+    width:  var(--sz, 24px);
+    height: var(--sz, 24px);
+    will-change: transform, opacity;
+    animation: softFloatUp var(--dur, 4s) cubic-bezier(0.25, 0.46, 0.45, 0.94) var(--delay, 0s) forwards;
+  }
+
+  /* Heart shape via CSS clip-path */
+  .float-heart::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: var(--hue, #ff6b8a);
+    clip-path: path('M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402z');
+    /* Normalise the path to 0–1 space for any size */
+    transform: scale(calc(var(--sz, 24px) / 24));
+    transform-origin: top left;
+  }
+
+  /* Soft outer glow using box-shadow on a rounded pseudo element */
+  .float-heart::after {
+    content: '';
+    display: block;
+    position: absolute;
+    inset: -40%;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center,
+      var(--glow, rgba(255,107,138,0.55)) 0%,
+      transparent 70%);
+    filter: blur(6px);
+  }
+
+  @keyframes softFloatUp {
+    0%   {
+      transform: translateY(0)     translateX(0)              rotate(var(--tilt, 0deg)) scale(0.5);
+      opacity: 0;
+    }
+    8%   {
+      opacity: var(--peak-opacity, 0.92);
+      transform: translateY(-6vh)  translateX(var(--wx1, 0px)) rotate(var(--tilt)) scale(1);
+    }
+    40%  {
+      opacity: var(--peak-opacity, 0.92);
+      transform: translateY(-42vh) translateX(var(--wx2, 0px)) rotate(calc(var(--tilt) * -0.6)) scale(0.95);
+    }
+    75%  {
+      opacity: 0.35;
+      transform: translateY(-75vh) translateX(var(--wx3, 0px)) rotate(calc(var(--tilt) * 0.3)) scale(0.75);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-108vh) translateX(var(--wx4, 0px)) rotate(0deg) scale(0.4);
+    }
+  }
+
+  /* "I Love You" overlay (partner mode) */
+  #ily-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    pointer-events: none;
+    overflow: hidden;
+    opacity: 1;
+    transition: opacity 0.8s ease;
+  }
+  #ily-overlay.active  { display: block; }
+  #ily-overlay.fading  { opacity: 0; }
+
+  /* Big pulsing heart in centre */
+  .ily-centre-heart {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(80px, 16vw, 140px);
+    animation: ilyPulse 0.7s ease-in-out infinite alternate;
+    filter: drop-shadow(0 0 24px rgba(212,60,80,0.65));
+    z-index: 2;
+  }
+  @keyframes ilyPulse {
+    from { transform: translate(-50%, -50%) scale(1);    filter: drop-shadow(0 0 18px rgba(212,60,80,0.55)); }
+    to   { transform: translate(-50%, -50%) scale(1.12); filter: drop-shadow(0 0 36px rgba(212,60,80,0.85)); }
+  }
+
+  /* "I Love You" text */
+  .ily-text {
+    position: absolute;
+    top: calc(50% + clamp(60px, 12vw, 110px));
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'EB Garamond', serif;
+    font-size: clamp(28px, 6vw, 56px);
+    font-weight: 600;
+    font-style: italic;
+    color: #ffffff;
+    text-shadow: 0 0 30px rgba(212,60,80,0.9), 0 2px 8px rgba(0,0,0,0.4);
+    white-space: nowrap;
+    animation: ilyTextIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+    z-index: 2;
+  }
+  @keyframes ilyTextIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(20px) scale(0.8); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0)    scale(1); }
+  }
+
+  /* Burst hearts that scatter from center */
+  .ily-burst {
+    position: absolute;
+    font-size: var(--sz, 22px);
+    animation: ilyBurst var(--dur, 1.2s) ease-out forwards;
+    pointer-events: none;
+  }
+  @keyframes ilyBurst {
+    0%   { transform: translate(0,0) scale(0.4) rotate(0deg);   opacity: 1; }
+    60%  { opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) scale(var(--sf,1)) rotate(var(--rot,30deg)); opacity: 0; }
+  }
+
+  /* Dim backdrop */
+  .ily-backdrop {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(120,0,30,0.55) 0%, rgba(0,0,0,0.72) 100%);
+    animation: ilyFadeIn 0.3s ease forwards;
+  }
+  @keyframes ilyFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  .ily-backdrop.out {
+    animation: ilyFadeOut 0.5s ease forwards;
+  }
+  @keyframes ilyFadeOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+  }
+</style>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container">
+
+<!-- Gold particle canvas — dark mode only -->
+<canvas id="gold-bg" aria-hidden="true" style="
+  display:none;
+  position:fixed;inset:0;z-index:0;
+  width:100%;height:100%;
+  pointer-events:none;
+"></canvas>
+
+<!-- I Love You overlay — partner heart click -->
+<div id="ily-overlay" aria-hidden="true"></div>
+
+<!-- ═══════════════════════════════════════════════
+     TOP NAVIGATION
+═══════════════════════════════════════════════ -->
+<header id="site-header" class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md shadow-sm h-20 transition-all duration-300">
+  <div class="flex justify-between items-center px-container-padding-mobile md:px-container-padding-desktop h-full max-w-7xl mx-auto">
+    <button onclick="navigate('home')" class="font-headline-md text-headline-md text-primary italic font-bold hover:opacity-80 transition-opacity">Together</button>
+    <nav class="hidden md:flex items-center gap-gutter">
+      <button onclick="navigate('home')"     class="nav-link font-label-md" id="nav-home">Home</button>
+      <button onclick="navigate('gallery')"  class="nav-link font-label-md" id="nav-gallery">Gallery</button>
+      <button onclick="navigate('timeline')" class="nav-link font-label-md" id="nav-timeline">Timeline</button>
+      <button onclick="navigate('dreams')"   class="nav-link font-label-md" id="nav-dreams">Our Dreams</button>
+      <button onclick="navigate('sky')"      class="nav-link font-label-md" id="nav-sky">Our Sky</button>
+      <button onclick="navigate('diary')"    class="nav-link font-label-md" id="nav-diary">Our Diary</button>
+    </nav>
+    <div class="flex items-center gap-4">
+      <!-- Single auth button: shows "Sign In" for viewers, "Sign Out" for partner -->
+      <button id="btn-auth" onclick="openLogin()"
+        class="flex items-center gap-2 px-6 py-2 rounded-full border border-primary text-primary font-label-md hover:bg-primary-container/30 transition-all duration-200">
+        Sign In
+      </button>
+      <!-- Dark / Light mode toggle -->
+      <button id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode"
+        class="w-10 h-10 flex items-center justify-center rounded-full border border-outline-variant/40 text-primary hover:bg-primary-container/30 transition-all duration-200">
+        <span id="theme-icon" class="material-symbols-outlined text-[20px]">dark_mode</span>
+      </button>
+      <span id="btn-heart" onclick="onHeartClick(event)"
+        class="material-symbols-outlined text-primary cursor-pointer select-none transition-transform duration-150 active:scale-75"
+        style="font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">favorite</span>
+      <button class="md:hidden text-primary" onclick="toggleMobileMenu()">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+    </div>
+  </div>
+  <!-- Mobile nav -->
+  <div id="mobile-menu" class="hidden md:hidden bg-surface/95 backdrop-blur-md border-t border-outline-variant/20 px-container-padding-mobile py-4 flex flex-col gap-4">
+    <button onclick="navigate('home');toggleMobileMenu()"     class="nav-link font-label-md text-left" id="mob-nav-home">Home</button>
+    <button onclick="navigate('gallery');toggleMobileMenu()"  class="nav-link font-label-md text-left" id="mob-nav-gallery">Gallery</button>
+    <button onclick="navigate('timeline');toggleMobileMenu()" class="nav-link font-label-md text-left" id="mob-nav-timeline">Timeline</button>
+    <button onclick="navigate('dreams');toggleMobileMenu()"   class="nav-link font-label-md text-left" id="mob-nav-dreams">Our Dreams</button>
+    <button onclick="navigate('sky');toggleMobileMenu()"      class="nav-link font-label-md text-left" id="mob-nav-sky">Our Sky</button>
+    <button onclick="navigate('diary');toggleMobileMenu()"    class="nav-link font-label-md text-left" id="mob-nav-diary">Our Diary</button>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE: HOME
+═══════════════════════════════════════════════ -->
+<div id="page-home" class="page active pt-20">
+  <!-- Hero -->
+  <section class="relative w-full h-[870px] overflow-hidden flex items-center justify-center">
+    <!-- Background layers -->
+    <div class="absolute inset-0 z-0 overflow-hidden">
+      <div id="hero-bg" class="w-full h-full bg-cover bg-center" style="background-image:url('assets/images/Home-bg.jpeg')"></div>
+      <!-- Base dark gradient -->
+      <div class="absolute inset-0 bg-gradient-to-b from-black/15 via-black/20 to-black/60"></div>
+      <!-- Aurora color overlay — adapts light / dark -->
+      <div id="hero-aurora"></div>
+      <!-- Floating particles -->
+      <div class="hero-particles" id="hero-particles"></div>
+      <!-- Partner: change photo -->
+      <label data-partner-only for="hero-img-input" class="absolute top-4 right-4 z-20 cursor-pointer items-center gap-2 px-4 py-2 rounded-full bg-white/70 backdrop-blur-md text-primary font-label-md hover:bg-white transition-all shadow-md">
+        <span class="material-symbols-outlined text-[18px]">photo_camera</span>
+        Change Photo
+      </label>
+      <input type="file" id="hero-img-input" accept="image/*,.heic,.heif" class="hidden" onchange="changeHomeImage('hero-bg', this)"/>
+    </div>
+
+    <!-- Hero content — centered, staggered entrance -->
+    <div class="relative z-10 w-full max-w-4xl mx-auto px-container-padding-mobile md:px-container-padding-desktop flex flex-col items-center text-center gap-6">
+
+      <!-- Frosted badge -->
+      <div class="hero-badge">
+        <span class="material-symbols-outlined text-[14px]" style="font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">favorite</span>
+        Our Sanctuary
+      </div>
+
+      <!-- Main tagline — butterflies land here -->
+      <p id="tagline-text" class="tagline-phrase hero-tagline relative">
+        Together, we've turned moments<br>into forever memories.
+      </p>
+
+      <!-- Subtitle -->
+      <p class="hero-sub font-body-lg text-body-lg max-w-xl italic hero-subtitle">
+        Capturing the quiet glances, the grand adventures,<br class="hidden md:block"> and everything in between.
+      </p>
+
+      <!-- CTA row -->
+      <div class="hero-cta-row flex flex-wrap items-center justify-center gap-4 mt-2">
+        <button onclick="navigate('gallery')"
+          class="hero-cta-btn hero-cta-primary flex items-center gap-2 px-7 py-3 rounded-full bg-primary text-on-primary font-label-md shadow-lg active:scale-95 transition-all duration-300">
+          <span class="material-symbols-outlined text-[18px]">photo_library</span>
+          Our Gallery
+        </button>
+        <button onclick="navigate('timeline')"
+          class="hero-cta-btn hero-cta-ghost flex items-center gap-2 px-7 py-3 rounded-full border border-white/50 text-white font-label-md backdrop-blur-sm active:scale-95 transition-all duration-300">
+          <span class="material-symbols-outlined text-[18px]">timeline</span>
+          Our Story
+        </button>
+      </div>
+    </div>
+
+    <!-- Scroll hint -->
+    <div id="hero-scroll-hint" class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1">
+      <span class="font-label-sm text-white/60 uppercase tracking-widest text-[10px]">Scroll</span>
+      <span class="material-symbols-outlined text-white/70 text-[22px]">expand_more</span>
+    </div>
+  </section>
+
+  <!-- ── Our Journey Bento ── -->
+  <section class="py-stack-lg px-container-padding-mobile md:px-container-padding-desktop max-w-7xl mx-auto">
+    <div class="text-center mb-stack-lg">
+      <h2 class="font-display-lg text-display-lg text-on-surface mb-4">Our Journey</h2>
+      <div class="h-1 w-24 bg-primary-container mx-auto rounded-full"></div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-start">
+
+      <!-- ① Large Featured "First Photo" Card -->
+      <div class="md:col-span-8 group relative rounded-[2rem] overflow-hidden aspect-[16/10] shadow-sm bg-surface-container-high flex items-end">
+        <div id="bento-featured-bg" class="absolute inset-0 bg-cover bg-center"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-on-surface/60 to-transparent"></div>
+        <label data-partner-only for="bento-featured-input" class="absolute top-4 right-4 z-20 cursor-pointer items-center gap-2 px-3 py-1.5 rounded-full bg-white/70 backdrop-blur-md text-primary font-label-sm hover:bg-white transition-all shadow-md">
+          <span class="material-symbols-outlined text-[16px]">photo_camera</span>
+          Change
+        </label>
+        <input type="file" id="bento-featured-input" accept="image/*,.heic,.heif" class="hidden" onchange="changeHomeImage('bento-featured-bg', this)"/>
+        <div class="absolute bottom-0 left-0 p-10 text-white">
+          <span class="font-label-sm uppercase tracking-[0.2em] mb-2 block opacity-80">Our First Photo Together</span>
+          <h3 id="bento-chapter-title" class="font-headline-lg text-headline-lg mb-3">Where It All Began</h3>
+        </div>
+      </div>
+
+      <!-- ② Our Songs card (right side) -->
+      <div class="md:col-span-4 bg-surface p-8 rounded-[2rem] shadow-sm border border-outline-variant/30 flex flex-col gap-6">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-full bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+              <span class="material-symbols-outlined">music_note</span>
+            </div>
+            <div>
+              <p class="font-label-md text-on-surface">Our Songs</p>
+              <p class="font-label-sm text-secondary">The soundtrack of our love</p>
+            </div>
+          </div>
+          <button data-partner-only onclick="if(isPartner()){ document.getElementById('song-form').classList.remove('hidden'); document.getElementById('song-cancel-btn').classList.remove('hidden'); }"
+            class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-all">
+            <span class="material-symbols-outlined text-[20px]">add</span>
+          </button>
+        </div>
+
+        <!-- Song list -->
+        <div id="song-list" class="flex flex-col gap-3 max-h-[280px] overflow-y-auto">
+          <!-- Songs will be rendered here by JS -->
+        </div>
+
+        <!-- Empty state -->
+        <div id="song-empty" class="flex flex-col items-center justify-center py-8 text-center">
+          <span class="material-symbols-outlined text-4xl text-outline-variant mb-2">music_note</span>
+          <p class="font-body-md text-secondary">No songs yet</p>
+          <p class="font-label-sm text-secondary mt-1">Add your first song to get started</p>
+        </div>
+
+        <!-- Partner: Add/Edit song form — shown/hidden by JS only -->
+        <div id="song-form" class="hidden border-t border-outline-variant/20 pt-4 flex-shrink-0 flex flex-col gap-2">
+          <input type="hidden" id="song-edit-id"/>
+          <input id="song-title-input"  type="text" class="app-input" placeholder="Song title" maxlength="80"/>
+          <input id="song-artist-input" type="text" class="app-input" placeholder="Artist" maxlength="80"/>
+          <input id="song-embed-input"  type="text" class="app-input" placeholder="Paste Spotify track URL or YouTube/embed link" maxlength="1000"/>
+          <div class="flex gap-2 justify-end">
+            <button id="song-cancel-btn" onclick="cancelEditSong()"
+              class="px-5 py-1.5 rounded-full border border-outline-variant/40 text-on-surface font-label-sm hover:border-primary transition-colors">
+              Cancel
+            </button>
+            <button onclick="saveSong()"
+              class="px-5 py-1.5 rounded-full bg-primary text-on-primary font-label-sm hover:scale-95 transition-transform">
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ③ Dreams teaser card — links to Our Dreams page -->
+      <div class="md:col-span-12 bg-surface-container rounded-[2rem] overflow-hidden border border-outline-variant/30 flex flex-col items-center justify-center gap-4 p-10 text-center cursor-pointer group hover:border-primary/50 hover:bg-surface-container-high transition-all duration-300"
+           onclick="navigate('dreams')">
+        <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-all duration-300">
+          <span class="material-symbols-outlined text-3xl" style="font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 48;">travel_explore</span>
+        </div>
+        <div>
+          <h4 class="font-headline-md text-headline-md text-on-surface mb-1">Our Dreams</h4>
+          <p class="font-body-md text-secondary max-w-xs">Bucket list, places to visit, movies to watch — all the adventures still ahead.</p>
+        </div>
+        <div class="flex items-center gap-1 text-primary font-label-sm group-hover:gap-2 transition-all duration-200">
+          <span>Explore</span>
+          <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div><!-- /page-home -->
+
+<!-- ═══════════════════════════════════════════════
+     PAGE: GALLERY
+═══════════════════════════════════════════════ -->
+<div id="page-gallery" class="page pt-28 pb-stack-lg max-w-7xl mx-auto px-container-padding-mobile md:px-container-padding-desktop">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-stack-lg">
+    <div>
+      <h1 class="font-display-lg text-display-lg text-on-surface mb-2">Our Memories</h1>
+      <p class="font-body-lg text-body-lg text-on-surface-variant max-w-lg">A private sanctuary for the moments that define us—from grand adventures to the quiet everyday.</p>
+    </div>
+    <button data-partner-only class="group flex items-center gap-3 bg-tertiary text-on-tertiary px-8 py-4 rounded-full font-label-md hover:bg-primary transition-all duration-300 shadow-md hover:shadow-xl active:scale-95">
+      <span class="material-symbols-outlined" style="font-variation-settings:'wght' 600;">add</span>
+      <span>Add Memory</span>
+    </button>
+  </div>
+  <!-- Filters -->
+  <div class="flex items-center gap-3 mb-10 overflow-x-auto pb-2">
+    <button class="filter-btn px-6 py-2 rounded-full bg-primary-container text-on-primary-container font-label-md transition-all whitespace-nowrap">All Memories</button>
+    <button class="filter-btn px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant hover:bg-tertiary-container hover:text-on-tertiary-container font-label-md transition-all whitespace-nowrap">Trips</button>
+    <button class="filter-btn px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant hover:bg-tertiary-container hover:text-on-tertiary-container font-label-md transition-all whitespace-nowrap">Dates</button>
+    <button class="filter-btn px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant hover:bg-tertiary-container hover:text-on-tertiary-container font-label-md transition-all whitespace-nowrap">Everyday</button>
+    <button class="filter-btn px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant hover:bg-tertiary-container hover:text-on-tertiary-container font-label-md transition-all whitespace-nowrap">Events</button>
+  </div>
+  <!-- Masonry — empty until you upload photos -->
+  <div class="masonry" id="gallery-grid">
+  </div>
+  <!-- Empty state -->
+  <div id="gallery-empty" class="text-center py-24">
+    <span class="material-symbols-outlined text-5xl text-outline-variant mb-4 block">photo_library</span>
+    <p class="font-headline-md text-headline-md text-on-surface-variant italic mb-2">No memories yet</p>
+    <p class="font-body-md text-secondary">Sign in and add your first memory.</p>
+  </div>
+</div><!-- /page-gallery -->
+
+<!-- ═══════════════════════════════════════════════
+     PAGE: TIMELINE
+═══════════════════════════════════════════════ -->
+<div id="page-timeline" class="page pt-32 pb-stack-lg max-w-7xl mx-auto px-container-padding-mobile md:px-container-padding-desktop overflow-hidden">
+  <!-- Hero -->
+  <div class="text-center mb-24 max-w-2xl mx-auto">
+    <h1 class="font-display-lg text-display-lg text-primary mb-4">Our Milestones</h1>
+    <p class="font-body-lg text-body-lg text-secondary">A curated collection of the beautiful moments that define our journey together, from the very first hello to today.</p>
+    <button data-partner-only onclick="openAddTimeline()" class="mt-8 flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-on-primary font-label-md hover:scale-95 transition-transform">
+      + Add Milestone
+    </button>
+  </div>
+  <!-- Timeline -->
+  <div class="relative max-w-4xl mx-auto pb-stack-lg">
+    <div class="absolute left-1/2 top-0 bottom-0 timeline-line -translate-x-1/2 hidden md:block"></div>
+    <!-- All entries rendered dynamically from Supabase -->
+    <div id="timeline-dynamic" class="space-y-stack-lg relative">
+      <!-- Empty state shown when no entries exist -->
+      <div id="timeline-empty" class="text-center py-24">
+        <span class="material-symbols-outlined text-5xl text-outline-variant mb-4 block">timeline</span>
+        <p class="font-headline-md text-headline-md text-on-surface-variant italic mb-2">No milestones yet</p>
+        <p class="font-body-md text-secondary">Sign in and add your first milestone.</p>
+      </div>
+    </div>
+  </div>
+</div><!-- /page-timeline -->
+
+<!-- ═══════════════════════════════════════════════
+     PAGE: OUR DREAMS
+═══════════════════════════════════════════════ -->
+<div id="page-dreams" class="page pt-28 pb-stack-lg max-w-7xl mx-auto px-container-padding-mobile md:px-container-padding-desktop">
+
+  <!-- Page header -->
+  <div class="text-center mb-16 max-w-2xl mx-auto">
+    <h1 class="font-display-lg text-display-lg text-on-surface mb-4">Our Dreams</h1>
+    <p class="font-body-lg text-body-lg text-secondary">All the adventures, places, and moments still waiting for us.</p>
+    <div class="h-1 w-24 bg-primary-container mx-auto rounded-full mt-6"></div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+
+    <!-- ① Bucket List — col 7 -->
+    <div class="lg:col-span-7 bg-surface rounded-[2rem] border border-outline-variant/30 shadow-sm flex flex-col overflow-hidden">
+      <div class="p-6 flex items-center justify-between border-b border-outline-variant/20">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-full bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">travel_explore</span>
+          </div>
+          <div>
+            <h2 class="font-headline-md text-headline-md text-on-surface">Bucket List</h2>
+            <p id="bucket-progress-label" class="font-label-sm text-secondary">Things we want to do together</p>
+          </div>
+        </div>
+        <button data-partner-only onclick="if(isPartner()) openBucketListAdd()"
+          class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-all">
+          <span class="material-symbols-outlined text-[20px]">add</span>
+        </button>
+      </div>
+      <!-- Progress bar -->
+      <div class="px-6 pt-4">
+        <div class="w-full h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+          <div id="bucket-progress-bar" class="h-full bg-primary rounded-full transition-all duration-700" style="width:0%"></div>
+        </div>
+      </div>
+      <!-- List -->
+      <div id="bucket-list" class="flex flex-col gap-1 px-4 py-4 max-h-[420px] overflow-y-auto flex-1"></div>
+      <!-- Empty state -->
+      <div id="bucket-empty" class="flex flex-col items-center justify-center gap-2 py-12 text-center px-6">
+        <span class="material-symbols-outlined text-5xl text-outline-variant mb-2">travel_explore</span>
+        <p class="font-body-md text-secondary">No adventures planned yet</p>
+        <p class="font-label-sm text-secondary mt-1">Add your first dream together</p>
+      </div>
+      <!-- Add form -->
+      <div id="bucket-form" class="hidden px-6 pb-6 pt-2 border-t border-outline-variant/20 flex flex-col gap-2">
+        <input id="bucket-input" type="text" class="app-input" placeholder="e.g. Watch the sunrise together…" maxlength="120"
+          onkeydown="if(event.key==='Enter'){event.preventDefault();saveBucketItem();}"/>
+        <div class="flex gap-2 justify-end">
+          <button onclick="closeBucketListAdd()"
+            class="px-5 py-1.5 rounded-full border border-outline-variant/40 text-on-surface font-label-sm hover:border-primary transition-colors">Cancel</button>
+          <button onclick="saveBucketItem()"
+            class="px-5 py-1.5 rounded-full bg-primary text-on-primary font-label-sm hover:scale-95 transition-transform">Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ② Right column: Watch List + Places -->
+    <div class="lg:col-span-5 flex flex-col gap-gutter">
+
+      <!-- Watch / Read List -->
+      <div class="bg-surface rounded-[2rem] border border-outline-variant/30 shadow-sm flex flex-col overflow-hidden">
+        <div class="p-6 flex items-center justify-between border-b border-outline-variant/20">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-full bg-tertiary/10 flex items-center justify-center text-tertiary flex-shrink-0">
+              <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">movie</span>
+            </div>
+            <div>
+              <h2 class="font-headline-md text-headline-md text-on-surface">Watch Together</h2>
+              <p class="font-label-sm text-secondary">Movies &amp; shows on our list</p>
+            </div>
+          </div>
+          <button data-partner-only onclick="if(isPartner()) openWatchListAdd()"
+            class="w-10 h-10 rounded-full bg-tertiary/10 flex items-center justify-center text-tertiary hover:bg-tertiary hover:text-on-tertiary transition-all">
+            <span class="material-symbols-outlined text-[20px]">add</span>
+          </button>
+        </div>
+        <div id="watch-list" class="flex flex-col gap-1 px-4 py-4 max-h-[260px] overflow-y-auto"></div>
+        <div id="watch-empty" class="flex flex-col items-center justify-center gap-2 py-10 text-center px-6">
+          <span class="material-symbols-outlined text-4xl text-outline-variant mb-1">movie</span>
+          <p class="font-body-md text-secondary">Nothing queued yet</p>
+        </div>
+        <div id="watch-form" class="hidden px-6 pb-6 pt-2 border-t border-outline-variant/20 flex flex-col gap-2">
+          <input id="watch-input" type="text" class="app-input" placeholder="e.g. Studio Ghibli marathon…" maxlength="120"
+            onkeydown="if(event.key==='Enter'){event.preventDefault();saveWatchItem();}"/>
+          <div class="flex gap-2 justify-end">
+            <button onclick="closeWatchListAdd()"
+              class="px-5 py-1.5 rounded-full border border-outline-variant/40 text-on-surface font-label-sm hover:border-primary transition-colors">Cancel</button>
+            <button onclick="saveWatchItem()"
+              class="px-5 py-1.5 rounded-full bg-tertiary text-on-tertiary font-label-sm hover:scale-95 transition-transform">Add</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Places to Visit -->
+      <div class="bg-surface rounded-[2rem] border border-outline-variant/30 shadow-sm flex flex-col overflow-hidden">
+        <div class="p-6 flex items-center justify-between border-b border-outline-variant/20">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-full bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+              <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">location_on</span>
+            </div>
+            <div>
+              <h2 class="font-headline-md text-headline-md text-on-surface">Places to Visit</h2>
+              <p class="font-label-sm text-secondary">Destinations on our map</p>
+            </div>
+          </div>
+          <button data-partner-only onclick="if(isPartner()) openPlaceListAdd()"
+            class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-all">
+            <span class="material-symbols-outlined text-[20px]">add</span>
+          </button>
+        </div>
+        <div id="place-list" class="flex flex-col gap-1 px-4 py-4 max-h-[260px] overflow-y-auto"></div>
+        <div id="place-empty" class="flex flex-col items-center justify-center gap-2 py-10 text-center px-6">
+          <span class="material-symbols-outlined text-4xl text-outline-variant mb-1">location_on</span>
+          <p class="font-body-md text-secondary">No destinations yet</p>
+        </div>
+        <div id="place-form" class="hidden px-6 pb-6 pt-2 border-t border-outline-variant/20 flex flex-col gap-2">
+          <input id="place-input" type="text" class="app-input" placeholder="e.g. Kyoto in cherry blossom season…" maxlength="120"
+            onkeydown="if(event.key==='Enter'){event.preventDefault();savePlaceItem();}"/>
+          <div class="flex gap-2 justify-end">
+            <button onclick="closePlaceListAdd()"
+              class="px-5 py-1.5 rounded-full border border-outline-variant/40 text-on-surface font-label-sm hover:border-primary transition-colors">Cancel</button>
+            <button onclick="savePlaceItem()"
+              class="px-5 py-1.5 rounded-full bg-primary text-on-primary font-label-sm hover:scale-95 transition-transform">Add</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /right col -->
+  </div><!-- /grid -->
+</div><!-- /page-dreams -->
+
+<!-- ═══════════════════════════════════════════════
+     PAGE: OUR SKY
+═══════════════════════════════════════════════ -->
+<div id="page-sky" class="page pt-28 pb-stack-lg max-w-7xl mx-auto px-container-padding-mobile md:px-container-padding-desktop">
+  <!-- Header -->
+  <div class="text-center mb-10 max-w-2xl mx-auto">
+    <h1 class="font-display-lg text-display-lg text-on-surface mb-4">Our Sky</h1>
+    <p class="font-body-lg text-body-lg text-secondary">The exact stars above Pagadian City on June 26, 2026 — the night our story began.</p>
+    <div class="h-1 w-24 bg-primary-container mx-auto rounded-full mt-6"></div>
+  </div>
+
+  <!-- Star map canvas wrapper -->
+  <div class="relative w-full max-w-6xl mx-auto bg-surface rounded-[2rem] border border-outline-variant/30 shadow-sm overflow-hidden">
+    <canvas id="sky-canvas" class="block w-full" style="cursor:crosshair;"></canvas>
+
+    <!-- Note tooltip (hidden by default) -->
+    <div id="sky-note-tooltip" class="hidden absolute z-30 bg-surface-container-high border border-outline-variant/40 rounded-xl shadow-lg p-4 w-64">
+      <p id="sky-note-star-name" class="font-headline-md text-primary mb-1"></p>
+      <p id="sky-note-text" class="font-body-md text-on-surface text-sm mb-3"></p>
+      <div class="flex gap-2">
+        <button id="sky-note-edit-btn" onclick="editSkyNote()" class="px-3 py-1 rounded-full bg-primary text-on-primary font-label-sm hover:scale-95 transition-transform text-xs">Edit</button>
+        <button id="sky-note-delete-btn" onclick="deleteSkyNote()" class="px-3 py-1 rounded-full border border-error/40 text-error font-label-sm hover:bg-error hover:text-white transition-colors text-xs">Delete</button>
+        <button onclick="closeSkyNoteTooltip()" class="px-3 py-1 rounded-full border border-outline-variant/40 text-secondary font-label-sm hover:border-primary transition-colors text-xs">Close</button>
+      </div>
+    </div>
+
+    <!-- Add note modal (hidden by default) -->
+    <div id="sky-note-modal" class="hidden absolute inset-0 z-40 bg-black/50 flex items-center justify-center p-4">
+      <div class="bg-surface rounded-2xl p-6 w-full max-w-sm shadow-xl">
+        <h3 id="sky-note-modal-title" class="font-headline-md text-headline-md text-primary mb-1">Add a Note</h3>
+        <p id="sky-note-modal-star" class="font-label-sm text-secondary mb-4"></p>
+        <textarea id="sky-note-input" rows="3" placeholder="Write something about this star…" class="w-full rounded-xl border border-outline-variant/40 bg-surface-container-low p-3 font-body-md text-on-surface text-sm focus:border-primary focus:outline-none resize-none"></textarea>
+        <div class="flex gap-2 mt-4 justify-end">
+          <button onclick="cancelSkyNote()" class="px-4 py-1.5 rounded-full border border-outline-variant/40 text-secondary font-label-sm hover:border-primary transition-colors">Cancel</button>
+          <button onclick="saveSkyNote()" class="px-4 py-1.5 rounded-full bg-primary text-on-primary font-label-sm hover:scale-95 transition-transform">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Our Sky Song Player (appears when moon is clicked) -->
+  <div id="sky-song-wrap" class="hidden mt-4 flex justify-center">
+    <div class="rounded-2xl overflow-hidden shadow-lg" style="background: rgba(15,20,35,0.9); border: 1px solid rgba(232,165,152,0.3);">
+      <iframe id="sky-song-iframe" src="" width="350" height="80" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    </div>
+  </div>
+
+  <!-- Caption -->
+  <p class="text-center font-body-md text-secondary mt-6 italic">June 26, 2026 · Where our story began</p>
+
+  <!-- Stats Bar: Days Together + Countdown -->
+  <div class="mt-10 max-w-4xl mx-auto">
+    <div class="rounded-[2rem] overflow-hidden border border-white/10" style="background: rgba(15,20,35,0.8); backdrop-filter: blur(10px);">
+      <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-white/10">
+
+        <!-- Days Together -->
+        <div class="p-10 flex flex-col md:flex-row items-center justify-center gap-8 text-center md:text-left">
+          <span class="material-symbols-outlined text-5xl" style="font-variation-settings:'FILL' 1,'wght' 300,'GRAD' 0,'opsz' 48; color: #e8a598;">favorite</span>
+          <div>
+            <p class="font-label-md uppercase tracking-widest mb-1" style="color: rgba(200,210,230,0.6);">Days Together</p>
+            <span id="days-together" class="font-display-lg text-display-lg" style="color: #e8a598;">0</span>
+            <p class="font-label-sm mt-1" style="color: rgba(200,210,230,0.5);">days &amp; counting</p>
+          </div>
+        </div>
+
+        <!-- Countdown -->
+        <div class="p-10 flex flex-col md:flex-row items-center justify-center gap-8 text-center md:text-left">
+          <span class="material-symbols-outlined text-5xl" style="color: #daaba2;">event</span>
+          <div>
+            <p class="font-label-md uppercase tracking-widest mb-1" id="countdown-label" style="color: rgba(200,210,230,0.6);">Until our next monthsary</p>
+            <div class="flex items-end gap-4 justify-center md:justify-start">
+              <div class="flex flex-col items-center"><span class="font-display-lg text-display-lg" id="days" style="color: #e8a598;">00</span><span class="font-label-sm uppercase tracking-widest" style="color: rgba(200,210,230,0.5);">Days</span></div>
+              <div class="flex flex-col items-center"><span class="font-display-lg text-display-lg" id="hours" style="color: #e8a598;">00</span><span class="font-label-sm uppercase tracking-widest" style="color: rgba(200,210,230,0.5);">Hrs</span></div>
+              <div class="flex flex-col items-center"><span class="font-display-lg text-display-lg" id="minutes" style="color: #e8a598;">00</span><span class="font-label-sm uppercase tracking-widest" style="color: rgba(200,210,230,0.5);">Min</span></div>
+              <div class="flex flex-col items-center"><span class="font-display-lg text-display-lg" id="seconds" style="color: #e8a598;">00</span><span class="font-label-sm uppercase tracking-widest" style="color: rgba(200,210,230,0.5);">Sec</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div><!-- /page-sky -->
+
+<!-- ═══════════════════════════════════════════════
+     PAGE: OUR DIARY
+═══════════════════════════════════════════════ -->
+<div id="page-diary" class="page pt-28 pb-stack-lg max-w-7xl mx-auto px-container-padding-mobile md:px-container-padding-desktop">
+  <!-- Header -->
+  <div class="text-center mb-10">
+    <h2 class="font-headline-lg text-headline-lg text-on-surface italic">Our Shared Diary Love</h2>
+    <p class="font-body-md text-secondary mt-2">Write messages to each other, sealed with love</p>
+  </div>
+
+  <!-- Write new message -->
+  <div class="max-w-2xl mx-auto mb-12">
+    <div class="rounded-3xl p-6 border border-outline-variant/30 relative overflow-hidden" style="background: rgba(210, 180, 160, 0.3); backdrop-filter: blur(10px);">
+      <!-- Floating hearts background -->
+      <div class="floating-hearts">
+        <span class="heart-float" style="left: 10%; animation-delay: 0s;">❤</span>
+        <span class="heart-float" style="left: 30%; animation-delay: 2s;">❤</span>
+        <span class="heart-float" style="left: 50%; animation-delay: 4s;">❤</span>
+        <span class="heart-float" style="left: 70%; animation-delay: 6s;">❤</span>
+        <span class="heart-float" style="left: 90%; animation-delay: 1s;">❤</span>
+      </div>
+      <h3 class="font-headline-md text-headline-md text-on-surface mb-4 relative z-10">Write a Message</h3>
+      <textarea id="diary-message" rows="4" placeholder="Write your message here..." class="w-full px-4 py-3 rounded-2xl border border-outline-variant/30 bg-white/80 font-body-md text-on-surface placeholder:text-secondary/50 focus:outline-none focus:border-primary/50 resize-none relative z-10"></textarea>
+      
+      <!-- Customization -->
+      <div class="mt-4 flex flex-wrap gap-4 items-center relative z-10">
+        <!-- Envelope color -->
+        <div class="flex items-center gap-2">
+          <span class="font-label-sm text-secondary">Color:</span>
+          <div class="flex gap-2">
+            <button onclick="selectDiaryColor('#e8a598')" class="w-8 h-8 rounded-full border-2 border-primary/30 diary-color-btn" style="background: #e8a598;" data-color="#e8a598"></button>
+            <button onclick="selectDiaryColor('#fbb6a8')" class="w-8 h-8 rounded-full border-2 border-transparent diary-color-btn" style="background: #fbb6a8;" data-color="#fbb6a8"></button>
+            <button onclick="selectDiaryColor('#daaba2')" class="w-8 h-8 rounded-full border-2 border-transparent diary-color-btn" style="background: #daaba2;" data-color="#daaba2"></button>
+            <button onclick="selectDiaryColor('#c9c6c1')" class="w-8 h-8 rounded-full border-2 border-transparent diary-color-btn" style="background: #c9c6c1;" data-color="#c9c6c1"></button>
+            <button onclick="selectDiaryColor('#8b9dc3')" class="w-8 h-8 rounded-full border-2 border-transparent diary-color-btn" style="background: #8b9dc3;" data-color="#8b9dc3"></button>
+            <button onclick="selectDiaryColor('#95a5c6')" class="w-8 h-8 rounded-full border-2 border-transparent diary-color-btn" style="background: #95a5c6;" data-color="#95a5c6"></button>
+          </div>
+        </div>
+        
+        <!-- Seal -->
+        <div class="flex items-center gap-2">
+          <span class="font-label-sm text-secondary">Seal:</span>
+          <div class="flex gap-2">
+            <button onclick="selectDiarySeal('heart')" class="w-8 h-8 rounded-full border-2 border-primary/30 flex items-center justify-center text-sm diary-seal-btn" data-seal="heart">❤️</button>
+            <button onclick="selectDiarySeal('star')" class="w-8 h-8 rounded-full border-2 border-transparent flex items-center justify-center text-sm diary-seal-btn" data-seal="star">⭐</button>
+            <button onclick="selectDiarySeal('flower')" class="w-8 h-8 rounded-full border-2 border-transparent flex items-center justify-center text-sm diary-seal-btn" data-seal="flower">🌸</button>
+            <button onclick="selectDiarySeal('moon')" class="w-8 h-8 rounded-full border-2 border-transparent flex items-center justify-center text-sm diary-seal-btn" data-seal="moon">🌙</button>
+            <button onclick="selectDiarySeal('butterfly')" class="w-8 h-8 rounded-full border-2 border-transparent flex items-center justify-center text-sm diary-seal-btn" data-seal="butterfly">🦋</button>
+          </div>
+        </div>
+      </div>
+      
+      <button onclick="saveDiaryEntry()" class="mt-4 w-full py-3 rounded-full bg-primary text-on-primary font-label-md hover:bg-primary/90 transition-colors relative z-10">Seal & Send</button>
+    </div>
+  </div>
+
+  <!-- Envelope grid -->
+  <div id="diary-entries" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+    <!-- Envelopes will be inserted here -->
+  </div>
+</div><!-- /page-diary -->
+
+<!-- ═══════════════════════════════════════════════
+     SHARED FOOTER
+═══════════════════════════════════════════════ -->
+<footer class="bg-surface-container-low mt-stack-lg">
+  <div class="w-full flex items-center justify-center px-container-padding-mobile md:px-container-padding-desktop py-stack-lg max-w-7xl mx-auto">
+    <p class="font-body-md text-secondary text-center">© 2026 Together. All rights reserved.</p>
+  </div>
+</footer>
+
+
+<script>
+// ─── SPA Navigation ───────────────────────────────────────────────
+const pages = ['home', 'gallery', 'timeline', 'dreams', 'sky', 'diary'];
+
+function navigate(page) {
+  pages.forEach(p => {
+    document.getElementById('page-' + p).classList.remove('active');
+  });
+  document.getElementById('page-' + page).classList.add('active');
+  pages.forEach(p => {
+    const link = document.getElementById('nav-' + p);
+    const mobLink = document.getElementById('mob-nav-' + p);
+    if (link) link.classList.toggle('active', p === page);
+    if (mobLink) mobLink.classList.toggle('active', p === page);
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (page === 'timeline') initScrollReveal();
+  if (page === 'dreams')   loadDreamsPage();
+  if (page === 'sky')      initSkyMap();
+  else                     stopSkyAnimation();
+}
+
+function toggleMobileMenu() {
+  document.getElementById('mobile-menu').classList.toggle('hidden');
+}
+
+function startCountdown() {
+  // Origin: June 26, 2026 — the relationship start date
+  // July 26, 2026 = 1st monthsary, August 26 = 2nd, etc.
+  // Encoded to avoid plain date literals in source
+  const originYear  = 2e3 + 26;                   // 2026
+  const originMonth = [0,1,2,3,4,5].length - 1;   // 5 = June (0-based)
+  const day         = [2,6].join('') * 1;          // 26
+
+  function ordinal(n) {
+    const s = ['th','st','nd','rd'];
+    const v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+  }
+
+  function getTarget(now) {
+    // Next upcoming 26th from today
+    const m = now.getDate() < day ? now.getMonth() : now.getMonth() + 1;
+    const y = m > 11 ? now.getFullYear() + 1 : now.getFullYear();
+    return new Date(y, m % 12, day, 0, 0, 0, 0);
+  }
+
+  function getMonthsaryNumber(target) {
+    // Months elapsed from origin to the target 26th
+    // Origin month (June 2026) = 0, July 2026 = 1st monthsary
+    const originDate = new Date(originYear, originMonth, day);
+    const months = (target.getFullYear() - originDate.getFullYear()) * 12
+                 + (target.getMonth()    - originDate.getMonth());
+    return Math.max(1, months);
+  }
+
+  function updateLabel(target) {
+    const n     = getMonthsaryNumber(target);
+    const label = document.getElementById('countdown-label');
+    if (label) label.textContent = `Until our ${ordinal(n)} monthsary`;
+  }
+
+  let target = getTarget(new Date());
+  updateLabel(target);
+
+  function tick() {
+    const diff = target - new Date();
+    if (diff <= 0) {
+      target = getTarget(new Date());
+      updateLabel(target);
+      return;
+    }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000)  / 60000);
+    const s = Math.floor((diff % 60000)    / 1000);
+    document.getElementById('days').textContent    = String(d).padStart(2,'0');
+    document.getElementById('hours').textContent   = String(h).padStart(2,'0');
+    document.getElementById('minutes').textContent = String(m).padStart(2,'0');
+    document.getElementById('seconds').textContent = String(s).padStart(2,'0');
+  }
+  setInterval(tick, 1000);
+  tick();
+}
+
+window.addEventListener('scroll', () => {
+  const header = document.getElementById('site-header');
+  if (window.scrollY > 50) header.classList.replace('h-20','h-16');
+  else header.classList.replace('h-16','h-20');
+});
+
+function initScrollReveal() {
+  const els = document.querySelectorAll('.reveal-on-scroll');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+  els.forEach(el => { el.classList.remove('visible'); observer.observe(el); });
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => {
+      b.classList.remove('bg-primary-container','text-on-primary-container');
+      b.classList.add('bg-surface-container-high','text-on-surface-variant');
+    });
+    btn.classList.add('bg-primary-container','text-on-primary-container');
+    btn.classList.remove('bg-surface-container-high','text-on-surface-variant');
+    const m = document.querySelector('.masonry');
+    m.style.opacity = '0.5';
+    m.style.transform = 'translateY(8px)';
+    setTimeout(() => { m.style.opacity = '1'; m.style.transform = ''; }, 300);
+  });
+});
+
+document.querySelectorAll('.masonry-item').forEach(item => {
+  item.addEventListener('mouseenter', () => item.style.zIndex = '10');
+  item.addEventListener('mouseleave', () => item.style.zIndex = '1');
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  navigate('home');
+  startCountdown();
+  // Restore saved theme
+  if (localStorage.getItem('theme') === 'dark') {
+    document.documentElement.classList.add('dark');
+    document.getElementById('theme-icon').textContent = 'light_mode';
+    startGoldParticles();
+  }
+
+  // ── Mouse-tracking 3D tilt on tagline (only when hovering) ──────────────────────
+  const tagline = document.getElementById('tagline-text');
+  if (tagline) {
+    const MAX_TILT = 8; // degrees max rotation - more subtle
+
+    tagline.addEventListener('mousemove', (e) => {
+      const rect   = tagline.getBoundingClientRect();
+      const cx     = rect.left + rect.width  / 2;
+      const cy     = rect.top  + rect.height / 2;
+      // Normalise mouse position relative to element centre (-1 to 1)
+      const nx     = (e.clientX - cx) / (rect.width / 2);
+      const ny     = (e.clientY - cy) / (rect.height / 2);
+      const rotY   =  nx * MAX_TILT;   // tilt left/right with mouse X
+      const rotX   = -ny * MAX_TILT;   // tilt up/down   with mouse Y
+      tagline.style.transform =
+        `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+    });
+
+    // Reset when mouse leaves the text element
+    tagline.addEventListener('mouseleave', () => {
+      tagline.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+    });
+  }
+
+  // ── Create floating particles for hero section ───────────────────────────────
+  function createHeroParticles() {
+    const container = document.getElementById('hero-particles');
+    if (!container) return;
+
+    const particleCount = 20;
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      
+      // Random size between 3px and 8px
+      const size = Math.random() * 5 + 3;
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+      
+      // Random horizontal position
+      particle.style.left = `${Math.random() * 100}%`;
+      
+      // Random animation duration between 15s and 25s
+      const duration = Math.random() * 10 + 15;
+      particle.style.animationDuration = `${duration}s`;
+      
+      // Random delay
+      particle.style.animationDelay = `${Math.random() * 15}s`;
+      
+      container.appendChild(particle);
+    }
+  }
+
+  createHeroParticles();
+});
+
+// ─── Dark / Light Mode Toggle ────────────────────────────────────
+function toggleTheme() {
+  const html = document.documentElement;
+  const icon = document.getElementById('theme-icon');
+  const isDark = html.classList.toggle('dark');
+  icon.textContent = isDark ? 'light_mode' : 'dark_mode';
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  if (isDark) startGoldParticles(); else stopGoldParticles();
+}
+
+// ─── Tagline Landing Butterflies — see butterflies.js ────────
+
+// ─── Gold Particle Background ─────────────────────────────────────
+let _goldRAF = null;
+
+function startGoldParticles() {
+  const canvas = document.getElementById('gold-bg');
+  canvas.style.display = 'block';
+  const ctx = canvas.getContext('2d');
+
+  let W, H, particles;
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Particle palette — warm gold tones
+  const COLORS = [
+    'rgba(212,175,55,',   // classic gold
+    'rgba(255,215,0,',    // bright gold
+    'rgba(197,158,44,',   // deep gold
+    'rgba(240,200,100,',  // pale gold
+    'rgba(180,140,40,',   // antique gold
+  ];
+
+  function makeParticle() {
+    const r = Math.random() * 2.2 + 0.4;
+    return {
+      x:    Math.random() * W,
+      y:    Math.random() * H,
+      r,
+      // slow upward drift with slight horizontal wobble
+      vx:   (Math.random() - 0.5) * 0.25,
+      vy:   -(Math.random() * 0.35 + 0.08),
+      alpha: Math.random() * 0.55 + 0.15,
+      // each particle fades in/out independently
+      pulse: Math.random() * Math.PI * 2,
+      pulseSpeed: Math.random() * 0.012 + 0.004,
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      // twinkle: occasional brief brightness flare
+      flare: 0,
+      flareDecay: Math.random() * 0.018 + 0.008,
+    };
+  }
+
+  const COUNT = Math.min(120, Math.floor((W * H) / 12000));
+  particles = Array.from({ length: COUNT }, makeParticle);
+
+  function draw() {
+    if (!document.documentElement.classList.contains('dark')) return;
+    ctx.clearRect(0, 0, W, H);
+
+    for (const p of particles) {
+      // Pulsing alpha
+      p.pulse += p.pulseSpeed;
+      const baseAlpha = p.alpha * (0.55 + 0.45 * Math.sin(p.pulse));
+
+      // Random flare trigger
+      if (p.flare <= 0 && Math.random() < 0.0015) p.flare = 1.0;
+      if (p.flare > 0) p.flare = Math.max(0, p.flare - p.flareDecay);
+      const finalAlpha = Math.min(1, baseAlpha + p.flare * 0.6);
+
+      // Soft glow halo
+      const grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 3.5);
+      grd.addColorStop(0,   p.color + finalAlpha + ')');
+      grd.addColorStop(0.4, p.color + (finalAlpha * 0.35) + ')');
+      grd.addColorStop(1,   p.color + '0)');
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r * 3.5, 0, Math.PI * 2);
+      ctx.fillStyle = grd;
+      ctx.fill();
+
+      // Core dot
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color + Math.min(1, finalAlpha + 0.25) + ')';
+      ctx.fill();
+
+      // Move
+      p.x += p.vx + Math.sin(p.pulse * 0.7) * 0.18;
+      p.y += p.vy;
+
+      // Wrap: when off top, respawn at bottom
+      if (p.y + p.r < 0)  { p.y = H + p.r; p.x = Math.random() * W; }
+      if (p.x + p.r < 0)  p.x = W + p.r;
+      if (p.x - p.r > W)  p.x = -p.r;
+    }
+
+    _goldRAF = requestAnimationFrame(draw);
+  }
+
+  draw();
+}
+
+function stopGoldParticles() {
+  if (_goldRAF) { cancelAnimationFrame(_goldRAF); _goldRAF = null; }
+  const canvas = document.getElementById('gold-bg');
+  // Fade out canvas then hide
+  canvas.style.transition = 'opacity 0.6s ease';
+  canvas.style.opacity = '0';
+  setTimeout(() => {
+    canvas.style.display = 'none';
+    canvas.style.opacity = '1';
+    canvas.style.transition = '';
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }, 620);
+}
+
+// ─── Heart Button ─────────────────────────────────────────────
+function onHeartClick(e) {
+  if (typeof isPartner === 'function' && isPartner()) {
+    showILoveYou();
+  } else {
+    launchFloatingHearts(e);
+  }
+}
+
+// ── Viewer: floating hearts from bottom ──────────────────────
+// ── Viewer: floating hearts + butterflies from bottom ────────
+function launchFloatingHearts(e) {
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+
+  // ── Hearts ──────────────────────────────────────────────────
+  const HEART_COLORS = [
+    ['#ff6b8a', 'rgba(255,107,138,0.6)'],
+    ['#ff94a8', 'rgba(255,148,168,0.55)'],
+    ['#ffb3c6', 'rgba(255,179,198,0.5)'],
+    ['#ff4d79', 'rgba(255,77,121,0.65)'],
+    ['#ffc8d8', 'rgba(255,200,216,0.45)'],
+    ['#e8a0bf', 'rgba(232,160,191,0.5)'],
+  ];
+  const heartCount = 22;
+
+  for (let i = 0; i < heartCount; i++) {
+    const el = document.createElement('div');
+    el.className = 'float-heart';
+
+    const segment = W / heartCount;
+    const x       = segment * i + Math.random() * segment;
+    const sz      = 18 + Math.random() * 22;
+    const tilt    = (Math.random() - 0.5) * 35;
+    const dur     = 3.2 + Math.random() * 2.2;
+    const delay   = Math.random() * 0.8;
+    const peakOp  = 0.75 + Math.random() * 0.2;
+    const wander  = () => `${(Math.random() - 0.5) * 60}px`;
+    const [hue, glow] = HEART_COLORS[Math.floor(Math.random() * HEART_COLORS.length)];
+
+    el.style.cssText = `
+      left: ${x}px;
+      --sz: ${sz}px;
+      --tilt: ${tilt}deg;
+      --dur: ${dur}s;
+      --delay: ${delay}s;
+      --peak-opacity: ${peakOp};
+      --wx1: ${wander()}; --wx2: ${wander()}; --wx3: ${wander()}; --wx4: ${wander()};
+      --hue: ${hue};
+      --glow: ${glow};
+    `;
+    document.body.appendChild(el);
+    el.addEventListener('animationend', () => el.remove(), { once: true });
+  }
+
+  // ── Butterflies — see butterflies.js ────────────────────────
+  spawnFloatingButterflies(W, H);
+
+  // Bounce the heart icon
+  const btn = document.getElementById('btn-heart');
+  if (btn) {
+    btn.style.transition = 'transform 0.15s cubic-bezier(0.34,1.56,0.64,1)';
+    btn.style.transform  = 'scale(1.55) rotate(-15deg)';
+    setTimeout(() => {
+      btn.style.transform = 'scale(1) rotate(0deg)';
+      setTimeout(() => { btn.style.transition = ''; }, 300);
+    }, 200);
+  }
+}
+
+// ── Partner: I Love You explosion ────────────────────────────
+let _ilyTimeout = null;
+
+function showILoveYou() {
+  const overlay = document.getElementById('ily-overlay');
+  overlay.innerHTML = '';
+  overlay.classList.remove('fading');
+  overlay.style.opacity = '';
+  overlay.classList.add('active');
+
+  // Backdrop
+  const bd = document.createElement('div');
+  bd.className = 'ily-backdrop';
+  overlay.appendChild(bd);
+
+  // Burst hearts scattered from centre
+  const HEARTS = ['❤️','💖','💗','💓','💕','💞','🌹','💘','💝'];
+  const total = 28;
+  const W = window.innerWidth, H = window.innerHeight;
+  const cx = W / 2, cy = H / 2;
+
+  for (let i = 0; i < total; i++) {
+    const el = document.createElement('span');
+    el.className = 'ily-burst';
+    el.textContent = HEARTS[Math.floor(Math.random() * HEARTS.length)];
+
+    // Random angle burst
+    const angle  = (Math.PI * 2 * i) / total + (Math.random() - 0.5) * 0.4;
+    const dist   = 120 + Math.random() * Math.min(W, H) * 0.38;
+    const tx     = Math.cos(angle) * dist;
+    const ty     = Math.sin(angle) * dist;
+    const sz     = 18 + Math.random() * 24;
+    const dur    = 0.9 + Math.random() * 0.8;
+    const delay  = Math.random() * 0.25;
+    const rot    = (Math.random() - 0.5) * 180;
+    const sf     = 0.5 + Math.random() * 0.8;
+
+    el.style.cssText = `
+      left: ${cx}px; top: ${cy}px;
+      --sz: ${sz}px; font-size: ${sz}px;
+      --tx: ${tx}px; --ty: ${ty}px;
+      --dur: ${dur}s;
+      --rot: ${rot}deg;
+      --sf: ${sf};
+      animation-delay: ${delay}s;
+    `;
+    overlay.appendChild(el);
+  }
+
+  // Centre big heart
+  const bigHeart = document.createElement('div');
+  bigHeart.className = 'ily-centre-heart';
+  bigHeart.textContent = '❤️';
+  overlay.appendChild(bigHeart);
+
+  // "I Love You" text
+  const txt = document.createElement('div');
+  txt.className = 'ily-text';
+  txt.textContent = 'I Love You 💕';
+  overlay.appendChild(txt);
+
+  // Bounce the nav heart icon
+  const btn = document.getElementById('btn-heart');
+  btn.style.transform = 'scale(1.6) rotate(-15deg)';
+  setTimeout(() => btn.style.transform = 'scale(1) rotate(0deg)', 400);
+
+  // Auto-dismiss after 2.8s
+  if (_ilyTimeout) clearTimeout(_ilyTimeout);
+  _ilyTimeout = setTimeout(() => closeILoveYou(), 2800);
+
+  // Click anywhere to dismiss early
+  overlay.addEventListener('click', closeILoveYou, { once: true });
+  overlay.style.pointerEvents = 'auto';
+}
+
+function closeILoveYou() {
+  if (_ilyTimeout) { clearTimeout(_ilyTimeout); _ilyTimeout = null; }
+  const overlay = document.getElementById('ily-overlay');
+  overlay.style.pointerEvents = 'none';
+  overlay.classList.add('fading');            // triggers opacity: 0 transition
+  setTimeout(() => {
+    overlay.classList.remove('active', 'fading');
+    overlay.style.opacity = '';               // reset for next open
+    overlay.innerHTML = '';
+  }, 820);                                    // slightly past the 0.8s transition
+}
+</script>
+
+<!-- ═══════════════════════════════════════════════
+     OUR SONG PLAYER MODAL
+═══════════════════════════════════════════════ -->
+<div id="song-modal" class="app-modal" role="dialog" aria-modal="true" aria-label="Our Song">
+  <div class="app-modal-card" style="max-width:640px; padding:0; overflow:hidden; background:#0f0f0f; border-radius:1.5rem;">
+    <!-- Header bar -->
+    <div class="flex items-center justify-between px-6 py-4" style="background:#1a1210;">
+      <div class="min-w-0">
+        <p id="song-modal-title"  class="font-headline-md text-white truncate">—</p>
+        <p id="song-modal-artist" class="font-label-sm truncate" style="color:#cbc8c3;">—</p>
+      </div>
+      <button onclick="closeSongPlayer()" aria-label="Close"
+        class="ml-4 flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-colors"
+        style="background:rgba(255,255,255,0.08);">
+        <span class="material-symbols-outlined text-white text-[20px]">close</span>
+      </button>
+    </div>
+    <!-- Player wrap: loader shown until iframe fires load event -->
+    <div id="song-player-wrap" style="position:relative; width:100%; padding-top:56.25%; background:#0f0f0f;">
+      <!-- Heart loader -->
+      <div id="song-loader" style="
+        position:absolute;inset:0;
+        display:flex;flex-direction:column;align-items:center;justify-content:center;
+        gap:16px;z-index:5;">
+        <div class="song-heart-loader">
+          <span>❤️</span>
+          <span>❤️</span>
+          <span>❤️</span>
+        </div>
+        <p style="font-family:'Be Vietnam Pro',sans-serif;font-size:13px;color:#9e8a87;letter-spacing:0.08em;">Loading your song…</p>
+      </div>
+      <!-- iframe inserted on open -->
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     UPLOAD / EDIT MEMORY MODAL
+═══════════════════════════════════════════════ -->
+<div id="upload-modal" class="app-modal" role="dialog" aria-modal="true">
+  <div class="app-modal-card">
+    <button onclick="closeUploadModal()" class="absolute top-5 right-5 text-on-surface-variant hover:text-primary transition-colors">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <h2 id="upload-modal-title" class="font-headline-md text-headline-md text-primary italic mb-6">Add a Memory</h2>
+    <form id="upload-form" onsubmit="event.preventDefault()">
+      <!-- Hidden: stores id when editing an existing memory -->
+      <input type="hidden" id="upload-edit-id"/>
+
+      <!-- File input — hidden in edit mode -->
+      <div id="upload-file-row">
+        <label class="app-label">Photo or Video *</label>
+        <input type="file" id="upload-file" accept="image/*,.heic,.heif,video/*" class="app-input" onchange="previewFile(this)"/>
+      </div>
+      <div id="upload-preview" class="mb-4"></div>
+
+      <!-- Current media preview in edit mode -->
+      <div id="upload-current-preview" class="hidden mb-4 relative rounded-xl overflow-hidden">
+        <div id="upload-current-img" class="w-full rounded-xl max-h-48 object-cover bg-surface-container-high"></div>
+        <p class="font-label-sm text-secondary mt-2">Current photo. Select a new file above to replace it.</p>
+      </div>
+
+      <label class="app-label">Title *</label>
+      <input type="text" id="upload-title" class="app-input" maxlength="80"/>
+
+      <label class="app-label">Description (optional)</label>
+      <textarea id="upload-caption" class="app-input" rows="2" style="resize:none;" placeholder="Add a description..."></textarea>
+
+      <label class="app-label">Category</label>
+      <select id="upload-category" class="app-input">
+        <option value="everyday">Everyday</option>
+        <option value="trips">Trips</option>
+        <option value="dates">Dates</option>
+        <option value="events">Events</option>
+      </select>
+
+      <label class="app-label">Date Taken</label>
+      <input type="date" id="upload-date" class="app-input"/>
+
+      <button id="btn-upload-submit" onclick="submitUpload()"
+        class="w-full px-6 py-3 rounded-full bg-primary text-on-primary font-label-md hover:scale-95 transition-transform mt-2">
+        Save Memory
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     TIMELINE MODAL
+═══════════════════════════════════════════════ -->
+<div id="timeline-modal" class="app-modal" role="dialog" aria-modal="true">
+  <div class="app-modal-card">
+    <button onclick="closeTimelineModal()" class="absolute top-5 right-5 text-on-surface-variant hover:text-primary transition-colors">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <h2 id="timeline-modal-title" class="font-headline-md text-headline-md text-primary italic mb-6">Add Milestone</h2>
+    <input type="hidden" id="timeline-entry-id"/>
+    <form id="timeline-form" onsubmit="event.preventDefault()">
+      <label class="app-label">Title *</label>
+      <input type="text" id="tl-title" class="app-input" maxlength="100"/>
+
+      <label class="app-label">Description (optional)</label>
+      <textarea id="tl-description" class="app-input" rows="3" style="resize:none;" placeholder="Add details about this milestone..."></textarea>
+
+      <label class="app-label">Date *</label>
+      <input type="date" id="tl-date" class="app-input"/>
+
+      <label class="app-label">Cover Photo (optional)</label>
+      <label for="tl-image" id="tl-image-label"
+        class="flex items-center gap-3 cursor-pointer px-4 py-3 rounded-xl border-2 border-dashed border-outline-variant/50 hover:border-primary hover:bg-primary/5 transition-all mb-4">
+        <span class="material-symbols-outlined text-primary text-[22px]">add_photo_alternate</span>
+        <span id="tl-image-label-text" class="font-label-md text-secondary">Choose a photo…</span>
+      </label>
+      <input type="file" id="tl-image" accept="image/*,.heic,.heif" class="hidden" onchange="previewTimelineImage(this)"/>
+      <div id="tl-image-preview" class="hidden mb-4 relative">
+        <img id="tl-image-preview-img" src="" alt="Preview" class="w-full rounded-xl max-h-48 object-cover"/>
+        <button type="button" onclick="clearTimelineImage()"
+          class="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-error transition-colors">
+          <span class="material-symbols-outlined text-[16px]">close</span>
+        </button>
+      </div>
+
+      <button id="btn-tl-submit" onclick="submitTimeline()"
+        class="w-full px-6 py-3 rounded-full bg-primary text-on-primary font-label-md hover:scale-95 transition-transform mt-2">
+        Save
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     DREAM COMPLETION MODAL
+═══════════════════════════════════════════════ -->
+<div id="dream-complete-modal" class="app-modal" role="dialog" aria-modal="true">
+  <div class="app-modal-card" style="max-width:440px;">
+    <button onclick="closeDreamComplete()" class="absolute top-5 right-5 text-on-surface-variant hover:text-primary transition-colors">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+
+    <!-- Celebration header -->
+    <div class="text-center mb-6">
+      <div class="text-5xl mb-3">🎉</div>
+      <h2 class="font-headline-md text-headline-md text-primary italic">You did it!</h2>
+      <p id="dream-complete-name" class="font-body-md text-secondary mt-1 truncate px-4"></p>
+    </div>
+
+    <input type="hidden" id="dream-complete-id"/>
+    <input type="hidden" id="dream-complete-list"/>
+
+    <label class="app-label">When did this happen?</label>
+    <input type="date" id="dream-complete-date" class="app-input"/>
+
+    <label class="app-label">Add a photo (optional)</label>
+    <label for="dream-complete-file"
+      class="flex items-center gap-3 cursor-pointer px-4 py-3 rounded-xl border-2 border-dashed border-outline-variant/50 hover:border-primary hover:bg-primary/5 transition-all mb-3">
+      <span class="material-symbols-outlined text-primary text-[22px]">add_photo_alternate</span>
+      <span id="dream-complete-file-label" class="font-label-md text-secondary">Choose a photo…</span>
+    </label>
+    <input type="file" id="dream-complete-file" accept="image/*,.heic,.heif" class="hidden" onchange="previewDreamPhoto(this)"/>
+    <div id="dream-complete-preview" class="hidden mb-4 relative">
+      <img id="dream-complete-preview-img" src="" alt="Preview" class="w-full rounded-xl max-h-40 object-cover"/>
+      <button type="button" onclick="clearDreamPhoto()"
+        class="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-error transition-colors">
+        <span class="material-symbols-outlined text-[16px]">close</span>
+      </button>
+    </div>
+
+    <div class="flex gap-3 mt-2">
+      <button onclick="closeDreamComplete()"
+        class="flex-1 px-5 py-3 rounded-full border border-outline-variant/40 text-on-surface font-label-md hover:border-primary transition-colors">
+        Cancel
+      </button>
+      <button onclick="confirmDreamComplete()"
+        class="flex-1 px-5 py-3 rounded-full bg-primary text-on-primary font-label-md hover:scale-95 transition-transform">
+        Mark Done ✓
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Login modal (fragment) -->
+<div id="login-modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
+  <div class="login-card">
+    <button onclick="closeLogin()" aria-label="Close"
+      class="absolute top-5 right-5 text-on-surface-variant hover:text-primary transition-colors">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="text-center mb-8">
+      <span class="material-symbols-outlined text-primary text-4xl mb-3 block"
+        style="font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">favorite</span>
+      <h2 id="login-title" class="font-headline-md text-headline-md text-primary italic">Welcome back</h2>
+    </div>
+    <div id="login-step-1" class="login-step">
+      <label class="font-label-md text-on-surface block mb-3">What is the last word we always say after "Goodnight"?</label>
+      <input id="input-callsign" type="text" class="login-input" placeholder="" autocomplete="off"
+        onkeydown="if(event.key==='Enter') checkCallsign()"/>
+      <p id="error-callsign" class="hidden mt-2 font-label-sm" style="color:#ba1a1a;">Hmm, that doesn't sound right. Try again.</p>
+      <button id="btn-step1" onclick="checkCallsign()"
+        class="mt-6 w-full px-6 py-3 rounded-full bg-primary text-on-primary font-label-md hover:scale-95 transition-transform">
+        Continue
+      </button>
+    </div>
+    <div id="login-step-2" class="login-step hidden-step">
+      <label class="font-label-md text-on-surface block mb-3">When was our monthsary?</label>
+      <input id="input-monthsary" type="text" class="login-input" placeholder="Format: MM/DD or Month Day" autocomplete="off"
+        onkeydown="if(event.key==='Enter') checkMonthsary()"/>
+      <p id="error-monthsary" class="hidden mt-2 font-label-sm" style="color:#ba1a1a;">That date doesn't match. Give it another try.</p>
+      <button id="btn-step2" onclick="checkMonthsary()"
+        class="mt-6 w-full px-6 py-3 rounded-full bg-primary text-on-primary font-label-md hover:scale-95 transition-transform">
+        Sign In
+      </button>
+    </div>
+    <div id="login-step-3" class="login-step hidden-step text-center">
+      <p class="text-4xl mb-4">💕</p>
+      <h3 class="font-headline-md text-headline-md text-primary italic mb-2">Welcome home, my love.</h3>
+      <p class="font-body-md text-secondary">You now have full access.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Auth script (separate file) -->
+<script src="auth/login.js"></script>
+<script src="butterflies.js"></script>
+<script src="oursky.js"></script>
+<script src="diary.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
